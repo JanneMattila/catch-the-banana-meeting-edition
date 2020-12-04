@@ -49,6 +49,16 @@ namespace CTB.Client.Pages
             await base.OnInitializedAsync();
         }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("CTB.initialize", _canvas);
+            }
+        }
+
         private void NamePlayerEventReceived(string name)
         {
             Console.WriteLine($"-> NamePlayerEventReceived: {name}");
