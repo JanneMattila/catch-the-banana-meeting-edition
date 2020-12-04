@@ -1,5 +1,6 @@
 ﻿using CTB.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace CTB.Client.Pages
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
+
+        protected ElementReference _canvas;
 
         private HubConnection _hubConnection;
 
@@ -50,6 +53,11 @@ namespace CTB.Client.Pages
         private void MoveEventReceived()
         {
             Console.WriteLine("-> MoveEventReceived");
+        }
+
+        protected void CanvasOnClick(MouseEventArgs eventArgs)
+        {
+            Console.WriteLine("-> CanvasOnClick");
         }
     }
 }
