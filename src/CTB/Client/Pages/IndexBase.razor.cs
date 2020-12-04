@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using CTB.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,12 @@ namespace CTB.Client.Pages
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();
 
-            _hubConnection.On("MoveEvent", () =>
+            _hubConnection.On(HubConstants.NamePlayerEventMethod, (string name) =>
+            {
+                NamePlayerEventReceived(name);
+                StateHasChanged();
+            });
+            _hubConnection.On(HubConstants.MoveEventMethod, () =>
             {
                 MoveEventReceived();
                 StateHasChanged();
@@ -34,6 +40,11 @@ namespace CTB.Client.Pages
             await _hubConnection.StartAsync();
 
             await base.OnInitializedAsync();
+        }
+
+        private void NamePlayerEventReceived(string name)
+        {
+            Console.WriteLine($"-> NamePlayerEventReceived: {name}");
         }
 
         private void MoveEventReceived()
