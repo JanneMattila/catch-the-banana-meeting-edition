@@ -3,6 +3,15 @@
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
 
+window.addEventListener('resize', () => {
+    console.log("resize");
+    if (_canvasElement !== undefined) {
+        _canvasElement.width = window.innerWidth * 0.8;
+        _canvasElement.height = window.innerHeight * 0.8;
+        CTB.draw(undefined);
+    }
+});
+
 CTB.initialize = (canvasElement: HTMLCanvasElement) => {
     console.log("=> initialize");
     _canvasElement = canvasElement;

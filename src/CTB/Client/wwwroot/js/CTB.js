@@ -1,6 +1,14 @@
 var CTB = CTB || {};
 var _canvasElement;
 var _context;
+window.addEventListener('resize', function () {
+    console.log("resize");
+    if (_canvasElement !== undefined) {
+        _canvasElement.width = window.innerWidth * 0.8;
+        _canvasElement.height = window.innerHeight * 0.8;
+        CTB.draw(undefined);
+    }
+});
 CTB.initialize = function (canvasElement) {
     console.log("=> initialize");
     _canvasElement = canvasElement;
