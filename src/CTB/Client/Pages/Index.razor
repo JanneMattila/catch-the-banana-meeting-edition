@@ -2,3 +2,9 @@
 @inherits IndexBase
 
 <canvas id="canvas" @ref="_canvas" width="800" height="800" @onclick="CanvasOnClick"></canvas>
+
+<div class="welcome" style="display: @WelcomeVisibility">
+    Welcome @PlayerName!
+
+    <button @onclick="LetsPlayOnClick">Let's play!</button>
+</div>

@@ -23,7 +23,12 @@ namespace CTB.Client.Pages
         [Inject] 
         private IJSRuntime JSRuntime { get; set; }
 
+        protected string PlayerName { get => _playerName; set => _playerName = value; }
+        public string WelcomeVisibility { get => _welcomeVisibility; set => _welcomeVisibility = value; }
+
         protected ElementReference _canvas;
+        private string _playerName;
+        private string _welcomeVisibility = "none";
 
         private HubConnection _hubConnection;
 
@@ -62,6 +67,8 @@ namespace CTB.Client.Pages
         private void NamePlayerEventReceived(string name)
         {
             Console.WriteLine($"-> NamePlayerEventReceived: {name}");
+            PlayerName = name;
+            WelcomeVisibility = "inline";
         }
 
         private void MoveEventReceived()
@@ -74,6 +81,13 @@ namespace CTB.Client.Pages
             Console.WriteLine("-> CanvasOnClick");
 
             await JSRuntime.InvokeVoidAsync("CTB.draw", eventArgs /* not real game object */);
+        }
+
+        protected void LetsPlayOnClick()
+        {
+            Console.WriteLine("-> LetsPlayOnClick");
+            WelcomeVisibility = "none";
+            WelcomeVisibility = "none";
         }
     }
 }

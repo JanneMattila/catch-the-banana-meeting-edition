@@ -5,6 +5,22 @@ html, body {
     background: #3e1654;
 }
 
+.welcome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(64,64,64,0.6);
+    backdrop-filter: blur(6px);
+    text-align: center;
+    display: table;
+}
+
+.welcome-Text {
+    color: white;
+}
+
 a, .btn-link {
     color: #0366d6;
 }
