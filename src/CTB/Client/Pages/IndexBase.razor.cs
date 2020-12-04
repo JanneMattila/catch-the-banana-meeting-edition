@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,9 @@ namespace CTB.Client.Pages
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
+
+        [Inject] 
+        private IJSRuntime JSRuntime { get; set; }
 
         protected ElementReference _canvas;
 
@@ -55,9 +59,11 @@ namespace CTB.Client.Pages
             Console.WriteLine("-> MoveEventReceived");
         }
 
-        protected void CanvasOnClick(MouseEventArgs eventArgs)
+        protected async Task CanvasOnClick(MouseEventArgs eventArgs)
         {
             Console.WriteLine("-> CanvasOnClick");
+
+            await JSRuntime.InvokeVoidAsync("CTB.draw", eventArgs /* not real game object */);
         }
     }
 }
