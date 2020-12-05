@@ -88,5 +88,22 @@ namespace CTB.Client.Pages
             Console.WriteLine("-> LetsPlayOnClick");
             WelcomeVisibility = ElementVisibility.None;
         }
+
+
+        [JSInvokable]
+        public static async void CanvasKeyDown(int keyCode)
+        {
+            Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
+
+            await Task.CompletedTask;
+        }
+
+        [JSInvokable]
+        public static async void CanvasKeyUp(int keyCode)
+        {
+            Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
+
+            await Task.CompletedTask;
+        }
     }
 }

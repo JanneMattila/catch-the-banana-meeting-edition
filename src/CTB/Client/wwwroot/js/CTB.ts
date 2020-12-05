@@ -1,4 +1,5 @@
 ﻿var CTB = CTB || {};
+declare var DotNet: any;
 
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
@@ -10,6 +11,14 @@ window.addEventListener('resize', () => {
         _canvasElement.height = window.innerHeight * 0.8;
         CTB.draw(undefined);
     }
+});
+
+document.addEventListener('keydown', (event: KeyboardEvent) => {
+    DotNet.invokeMethod("CTB.Client", "CanvasKeyDown", event.keyCode);
+});
+
+document.addEventListener('keyup', (event: KeyboardEvent) => {
+    DotNet.invokeMethod("CTB.Client", "CanvasKeyUp", event.keyCode);
 });
 
 CTB.getUserId =  () => {

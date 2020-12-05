@@ -1,7 +1,7 @@
 var CTB = CTB || {};
-var _canvasElement;
-var _context;
-window.addEventListener('resize', function () {
+let _canvasElement;
+let _context;
+window.addEventListener('resize', () => {
     console.log("resize");
     if (_canvasElement !== undefined) {
         _canvasElement.width = window.innerWidth * 0.8;
@@ -9,25 +9,31 @@ window.addEventListener('resize', function () {
         CTB.draw(undefined);
     }
 });
-CTB.getUserId = function () {
-    var id = "";
-    var CatchTheBananaUserId = "CatchTheBananaUserId";
-    var searchText = CatchTheBananaUserId + "=";
-    var startIndex = document.cookie.indexOf(searchText);
+document.addEventListener('keydown', (event) => {
+    DotNet.invokeMethod("CTB.Client", "CanvasKeyDown", event.keyCode);
+});
+document.addEventListener('keyup', (event) => {
+    DotNet.invokeMethod("CTB.Client", "CanvasKeyUp", event.keyCode);
+});
+CTB.getUserId = () => {
+    let id = "";
+    const CatchTheBananaUserId = "CatchTheBananaUserId";
+    const searchText = `${CatchTheBananaUserId}=`;
+    let startIndex = document.cookie.indexOf(searchText);
     if (startIndex === -1) {
         try {
-            var random = window.crypto.getRandomValues(new Uint32Array(4));
+            const random = window.crypto.getRandomValues(new Uint32Array(4));
             id = random[0].toString(16) + "-" + random[1].toString(16) + "-" + random[2].toString(16) + "-" + random[3].toString(16);
         }
         catch (e) {
             console.log("Secure random number generation is not supported.");
             id = Math.floor(Math.random() * 10000000000).toString();
         }
-        document.cookie = CatchTheBananaUserId + "=" + id + "; max-age=" + 3600 * 12 + "; secure; samesite=strict";
+        document.cookie = `${CatchTheBananaUserId}=${id}; max-age=${3600 * 12}; secure; samesite=strict`;
     }
     else {
         startIndex = startIndex + searchText.length;
-        var endIndex = document.cookie.indexOf(";", startIndex);
+        const endIndex = document.cookie.indexOf(";", startIndex);
         if (endIndex === -1) {
             id = document.cookie.substr(startIndex);
         }
@@ -37,20 +43,20 @@ CTB.getUserId = function () {
     }
     return id;
 };
-CTB.requestAnimationFrame = function (timestamp) {
+CTB.requestAnimationFrame = (timestamp) => {
     CTB.update(timestamp);
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 };
-CTB.initialize = function (canvasElement) {
+CTB.initialize = (canvasElement) => {
     console.log("=> initialize");
     _canvasElement = canvasElement;
     _context = _canvasElement.getContext("2d");
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
 };
-CTB.update = function (timestamp) {
+CTB.update = (timestamp) => {
 };
-CTB.draw = function (game) {
+CTB.draw = (game) => {
     console.log("=> draw");
     console.log(game);
     if (_context === undefined) {
