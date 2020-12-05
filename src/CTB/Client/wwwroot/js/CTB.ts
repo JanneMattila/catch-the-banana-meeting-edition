@@ -3,6 +3,7 @@ declare var DotNet: any;
 
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
+let _dotnetRef: any;
 
 window.addEventListener('resize', () => {
     console.log("resize");
@@ -14,11 +15,15 @@ window.addEventListener('resize', () => {
 });
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
-    DotNet.invokeMethod("CTB.Client", "CanvasKeyDown", event.keyCode);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
+    }
 });
 
 document.addEventListener('keyup', (event: KeyboardEvent) => {
-    DotNet.invokeMethod("CTB.Client", "CanvasKeyUp", event.keyCode);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
+    }
 });
 
 CTB.getUserId =  () => {
@@ -51,21 +56,21 @@ CTB.getUserId =  () => {
 }
 
 CTB.requestAnimationFrame = (timestamp: number) => {
-    CTB.update(timestamp);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("GameUpdate", timestamp);
+    }
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 }
 
-CTB.initialize = (canvasElement: HTMLCanvasElement) => {
+CTB.initialize = (canvasElement: HTMLCanvasElement, dotnetRef: any) => {
     console.log("=> initialize");
     _canvasElement = canvasElement;
+    _dotnetRef = dotnetRef;
     _context = _canvasElement.getContext("2d");
 
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
 };
-
-CTB.update = (timestamp: number) => {
-}
 
 CTB.draw = (game) => {
     console.log("=> draw");

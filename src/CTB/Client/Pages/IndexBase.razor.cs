@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CTB.Client.Pages
 {
-    public class IndexBase : ComponentBase
+    public class IndexBase : ComponentBase, IDisposable
     {
         [Inject] 
         private HttpClient Http { get; set; }
@@ -30,6 +30,7 @@ namespace CTB.Client.Pages
         private string _playerName;
         private string _welcomeVisibility = ElementVisibility.None;
 
+        private DotNetObjectReference<IndexBase> _selfRef;
         private HubConnection _hubConnection;
 
         protected override async Task OnInitializedAsync()
@@ -60,7 +61,8 @@ namespace CTB.Client.Pages
 
             if (firstRender)
             {
-                await JSRuntime.InvokeVoidAsync("CTB.initialize", _canvas);
+                _selfRef = DotNetObjectReference.Create(this);
+                await JSRuntime.InvokeVoidAsync("CTB.initialize", _canvas, _selfRef);
             }
         }
 
@@ -91,7 +93,7 @@ namespace CTB.Client.Pages
 
 
         [JSInvokable]
-        public static async void CanvasKeyDown(int keyCode)
+        public async void CanvasKeyDown(int keyCode)
         {
             Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
 
@@ -99,11 +101,23 @@ namespace CTB.Client.Pages
         }
 
         [JSInvokable]
-        public static async void CanvasKeyUp(int keyCode)
+        public async void CanvasKeyUp(int keyCode)
         {
             Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
 
             await Task.CompletedTask;
+        }
+
+
+        [JSInvokable]
+        public async void GameUpdate(double timestamp)
+        {
+            await Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _selfRef?.Dispose();
         }
     }
 }

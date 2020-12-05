@@ -1,6 +1,7 @@
 var CTB = CTB || {};
 let _canvasElement;
 let _context;
+let _dotnetRef;
 window.addEventListener('resize', () => {
     console.log("resize");
     if (_canvasElement !== undefined) {
@@ -10,10 +11,14 @@ window.addEventListener('resize', () => {
     }
 });
 document.addEventListener('keydown', (event) => {
-    DotNet.invokeMethod("CTB.Client", "CanvasKeyDown", event.keyCode);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
+    }
 });
 document.addEventListener('keyup', (event) => {
-    DotNet.invokeMethod("CTB.Client", "CanvasKeyUp", event.keyCode);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
+    }
 });
 CTB.getUserId = () => {
     let id = "";
@@ -44,17 +49,18 @@ CTB.getUserId = () => {
     return id;
 };
 CTB.requestAnimationFrame = (timestamp) => {
-    CTB.update(timestamp);
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("GameUpdate", timestamp);
+    }
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 };
-CTB.initialize = (canvasElement) => {
+CTB.initialize = (canvasElement, dotnetRef) => {
     console.log("=> initialize");
     _canvasElement = canvasElement;
+    _dotnetRef = dotnetRef;
     _context = _canvasElement.getContext("2d");
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
-};
-CTB.update = (timestamp) => {
 };
 CTB.draw = (game) => {
     console.log("=> draw");
