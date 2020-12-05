@@ -4,7 +4,11 @@
 <canvas id="canvas" @ref="_canvas" width="800" height="800" @onclick="CanvasOnClick"></canvas>
 
 <div class="welcome" style="display: @WelcomeVisibility">
-    Welcome @PlayerName!
-
-    <button @onclick="LetsPlayOnClick">Let's play!</button>
+    <div class="welcome-Text">
+        Welcome <b>@PlayerName</b>!<br />
+        <br />
+        By clicking the "Let's play" you agree our cookie policy.<br />
+        <br />
+        <button class="btn btn-primary" @onclick="LetsPlayOnClick">Let's play!</button>
+    </div>
 </div>

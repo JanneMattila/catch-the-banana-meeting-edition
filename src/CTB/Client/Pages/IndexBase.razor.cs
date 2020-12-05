@@ -28,7 +28,7 @@ namespace CTB.Client.Pages
 
         protected ElementReference _canvas;
         private string _playerName;
-        private string _welcomeVisibility = "none";
+        private string _welcomeVisibility = ElementVisibility.None;
 
         private HubConnection _hubConnection;
 
@@ -68,7 +68,7 @@ namespace CTB.Client.Pages
         {
             Console.WriteLine($"-> NamePlayerEventReceived: {name}");
             PlayerName = name;
-            WelcomeVisibility = "inline";
+            WelcomeVisibility = ElementVisibility.Inline;
         }
 
         private void MoveEventReceived()
@@ -86,8 +86,7 @@ namespace CTB.Client.Pages
         protected void LetsPlayOnClick()
         {
             Console.WriteLine("-> LetsPlayOnClick");
-            WelcomeVisibility = "none";
-            WelcomeVisibility = "none";
+            WelcomeVisibility = ElementVisibility.None;
         }
     }
 }
