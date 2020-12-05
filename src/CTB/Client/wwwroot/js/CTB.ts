@@ -41,13 +41,22 @@ CTB.getUserId =  () => {
     return id;
 }
 
+CTB.requestAnimationFrame = (timestamp: number) => {
+    CTB.update(timestamp);
+    window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
+}
+
 CTB.initialize = (canvasElement: HTMLCanvasElement) => {
     console.log("=> initialize");
     _canvasElement = canvasElement;
     _context = _canvasElement.getContext("2d");
 
     CTB.draw(undefined);
+    CTB.requestAnimationFrame(0);
 };
+
+CTB.update = (timestamp: number) => {
+}
 
 CTB.draw = (game) => {
     console.log("=> draw");
