@@ -2,14 +2,14 @@ var CTB = CTB || {};
 let _canvasElement;
 let _context;
 let _dotnetRef;
-window.addEventListener('resize', () => {
-    console.log("resize");
-    if (_canvasElement !== undefined) {
-        _canvasElement.width = window.innerWidth * 0.8;
-        _canvasElement.height = window.innerHeight * 0.8;
-        CTB.draw(undefined);
-    }
-});
+//window.addEventListener('resize', () => {
+//    console.log("resize");
+//    if (_canvasElement !== undefined) {
+//        _canvasElement.width = window.innerWidth * 0.8;
+//        _canvasElement.height = window.innerHeight * 0.8;
+//        CTB.draw(undefined);
+//    }
+//});
 document.addEventListener('keydown', (event) => {
     if (_dotnetRef !== undefined) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
@@ -20,7 +20,7 @@ document.addEventListener('keyup', (event) => {
         _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
     }
 });
-CTB.getUserId = () => {
+CTB.getPlayerId = () => {
     let id = "";
     const CatchTheBananaUserId = "CatchTheBananaUserId";
     const searchText = `${CatchTheBananaUserId}=`;
@@ -61,6 +61,7 @@ CTB.initialize = (canvasElement, dotnetRef) => {
     _context = _canvasElement.getContext("2d");
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
+    return CTB.getPlayerId();
 };
 CTB.draw = (game) => {
     console.log("=> draw");

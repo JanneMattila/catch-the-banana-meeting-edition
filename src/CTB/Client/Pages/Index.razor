@@ -1,11 +1,13 @@
 ﻿@page "/"
 @inherits IndexBase
 
-<canvas id="canvas" @ref="_canvas" width="800" height="800" @onclick="CanvasOnClick"></canvas>
+<div class="game">
+    <canvas id="canvas" @ref="_canvas" class="game" @onclick="CanvasOnClick"></canvas>
+</div>
 
 <div class="welcome" style="display: @WelcomeVisibility">
     <div class="welcome-Text">
-        Welcome <b>@PlayerName</b>!<br />
+        Welcome <b>@_gameEngine.PlayerName</b>!<br />
         <br />
         By clicking the "Let's play" you agree our cookie policy.<br />
         <br />

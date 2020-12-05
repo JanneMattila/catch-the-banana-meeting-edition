@@ -5,14 +5,14 @@ let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
 let _dotnetRef: any;
 
-window.addEventListener('resize', () => {
-    console.log("resize");
-    if (_canvasElement !== undefined) {
-        _canvasElement.width = window.innerWidth * 0.8;
-        _canvasElement.height = window.innerHeight * 0.8;
-        CTB.draw(undefined);
-    }
-});
+//window.addEventListener('resize', () => {
+//    console.log("resize");
+//    if (_canvasElement !== undefined) {
+//        _canvasElement.width = window.innerWidth * 0.8;
+//        _canvasElement.height = window.innerHeight * 0.8;
+//        CTB.draw(undefined);
+//    }
+//});
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
     if (_dotnetRef !== undefined) {
@@ -26,7 +26,7 @@ document.addEventListener('keyup', (event: KeyboardEvent) => {
     }
 });
 
-CTB.getUserId =  () => {
+CTB.getPlayerId =  () => {
     let id = "";
     const CatchTheBananaUserId = "CatchTheBananaUserId";
     const searchText = `${CatchTheBananaUserId}=`;
@@ -62,7 +62,7 @@ CTB.requestAnimationFrame = (timestamp: number) => {
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 }
 
-CTB.initialize = (canvasElement: HTMLCanvasElement, dotnetRef: any) => {
+CTB.initialize = (canvasElement: HTMLCanvasElement, dotnetRef: any): string => {
     console.log("=> initialize");
     _canvasElement = canvasElement;
     _dotnetRef = dotnetRef;
@@ -70,6 +70,7 @@ CTB.initialize = (canvasElement: HTMLCanvasElement, dotnetRef: any) => {
 
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
+    return CTB.getPlayerId();
 };
 
 CTB.draw = (game) => {

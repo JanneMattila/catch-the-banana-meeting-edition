@@ -2,7 +2,8 @@
 {
     public static class HubConstants
     {
-        public const string NamePlayerEventMethod = "NamePlayerEvent";
+        public const string PlayerIDEventMethod = "PlayerIDEvent";
+        public const string PlayerNameEventMethod = "PlayerNameEvent";
         public const string MoveEventMethod = "MoveEvent";
     }
 }

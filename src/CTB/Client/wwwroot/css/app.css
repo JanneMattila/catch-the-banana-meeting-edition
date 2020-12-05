@@ -9,6 +9,25 @@ html, body {
     overscroll-behavior-y: contain;
 }
 
+.gameWrapper {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.game {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    display: table-cell;
+}
+
 .welcome {
     position: absolute;
     top: 0;

@@ -23,11 +23,10 @@ namespace CTB.Client.Pages
         [Inject] 
         private IJSRuntime JSRuntime { get; set; }
 
-        protected string PlayerName { get => _playerName; set => _playerName = value; }
         public string WelcomeVisibility { get => _welcomeVisibility; set => _welcomeVisibility = value; }
 
         protected ElementReference _canvas;
-        private string _playerName;
+        protected GameEngine _gameEngine = new GameEngine();
         private string _welcomeVisibility = ElementVisibility.None;
 
         private DotNetObjectReference<IndexBase> _selfRef;
@@ -39,7 +38,7 @@ namespace CTB.Client.Pages
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();
 
-            _hubConnection.On(HubConstants.NamePlayerEventMethod, (string name) =>
+            _hubConnection.On(HubConstants.PlayerNameEventMethod, (string name) =>
             {
                 NamePlayerEventReceived(name);
                 StateHasChanged();
@@ -62,14 +61,17 @@ namespace CTB.Client.Pages
             if (firstRender)
             {
                 _selfRef = DotNetObjectReference.Create(this);
-                await JSRuntime.InvokeVoidAsync("CTB.initialize", _canvas, _selfRef);
+                var playerID = await JSRuntime.InvokeAsync<string>("CTB.initialize", _canvas, _selfRef);
+                _gameEngine.SetPlayerID(playerID);
+                await _hubConnection.InvokeAsync(HubConstants.PlayerIDEventMethod, playerID);
             }
         }
 
         private void NamePlayerEventReceived(string name)
         {
             Console.WriteLine($"-> NamePlayerEventReceived: {name}");
-            PlayerName = name;
+            _gameEngine.SetPlayerName(name);
+
             WelcomeVisibility = ElementVisibility.Inline;
         }
 
