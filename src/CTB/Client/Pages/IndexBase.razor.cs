@@ -26,7 +26,7 @@ namespace CTB.Client.Pages
         public string WelcomeVisibility { get => _welcomeVisibility; set => _welcomeVisibility = value; }
 
         protected ElementReference _canvas;
-        protected GameEngine _gameEngine = new GameEngine();
+        protected GameEngine _gameEngine = new();
         private string _welcomeVisibility = ElementVisibility.None;
 
         private DotNetObjectReference<IndexBase> _selfRef;
@@ -34,6 +34,7 @@ namespace CTB.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            _gameEngine.SetExecuteDraw(async (game) => await JSRuntime.InvokeAsync<string>("CTB.draw", game));
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();
@@ -43,6 +44,7 @@ namespace CTB.Client.Pages
                 NamePlayerEventReceived(name);
                 StateHasChanged();
             });
+
             _hubConnection.On(HubConstants.MoveEventMethod, () =>
             {
                 MoveEventReceived();

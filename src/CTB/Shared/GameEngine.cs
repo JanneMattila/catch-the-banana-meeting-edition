@@ -11,6 +11,14 @@ namespace CTB.Shared
         public string PlayerID { get; private set; }
         public string PlayerName { get; private set; }
 
+        private Game _game = new Game();
+        private Action<Game> _executeDraw;
+
+        public void SetExecuteDraw(Action<Game> executeDraw)
+        {
+            _executeDraw = executeDraw;
+        }
+
         public void SetPlayerID(string playerID)
         {
             PlayerID = playerID;
@@ -23,6 +31,7 @@ namespace CTB.Shared
 
         public void Update(double delta)
         {
+            _executeDraw(_game);
         }
     }
 }
