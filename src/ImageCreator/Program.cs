@@ -26,7 +26,10 @@ namespace ImageCreator
                 ". . . f d d c d d b b d f . . .\n" +
                 ". . . . f f f f f f f f f . . .";
             Console.WriteLine(playerImageData);
-            CreatePlayer("monkey.png", playerImageData, Color.Red, Color.DarkBlue);
+
+            CreatePlayer("monkey1.png", playerImageData, eyes: Color.Red, body: Color.Blue);
+            CreatePlayer("monkey2.png", playerImageData, eyes: Color.Blue, body: Color.Brown);
+            CreatePlayer("monkey3.png", playerImageData, eyes: Color.DarkBlue, body: Color.DarkKhaki);
         }
 
         private static void CreatePlayer(string imageName, string data, Color eyes, Color body)
