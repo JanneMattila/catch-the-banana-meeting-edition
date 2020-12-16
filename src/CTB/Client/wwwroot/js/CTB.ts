@@ -104,9 +104,6 @@ CTB.initialize = (canvasElement: HTMLCanvasElement, dotnetRef: any): string => {
 };
 
 CTB.draw = (game) => {
-    console.log("=> draw");
-    console.log(game);
-
     if (_context === undefined) {
         return;
     }
@@ -116,9 +113,11 @@ CTB.draw = (game) => {
     _context.fillRect(0, 0, _canvasElement.width, _canvasElement.height);
     _context.fill();
 
-    if (_imagesLoaded === _imagesToLoad) {
-        _context.drawImage(_images[0], _canvasElement.width / 2, _canvasElement.height / 2);
+    if (game !== undefined) {
+        if (_imagesLoaded === _imagesToLoad) {
+            _context.drawImage(_images[0], game.me.position.x, game.me.position.y);
+        }
     }
-
+    
     _context.restore();
 };

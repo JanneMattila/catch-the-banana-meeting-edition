@@ -13,12 +13,10 @@ namespace CTB.Shared.Interfaces
         [JsonPropertyName("score")]
         public int Score { get; set; }
 
-        [JsonPropertyName("position")]
-        public Position Position { get; set; }
+        [JsonPropertyName("ui")]
+        public string UI { get; set; }
 
-        public Monkey()
-        {
-            Position = new Position();
-        }
+        [JsonPropertyName("position")]
+        public Position Position { get; set; } = new();
     }
 }

@@ -85,8 +85,7 @@ namespace CTB.Client.Pages
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)
         {
             Console.WriteLine("-> CanvasOnClick");
-
-            await JSRuntime.InvokeVoidAsync("CTB.draw", eventArgs /* not real game object */);
+            await Task.CompletedTask;
         }
 
         protected void LetsPlayOnClick()
@@ -100,7 +99,7 @@ namespace CTB.Client.Pages
         public async void CanvasKeyDown(int keyCode)
         {
             Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
-
+            _gameEngine.OnKeyDown(keyCode);
             await Task.CompletedTask;
         }
 
@@ -108,14 +107,15 @@ namespace CTB.Client.Pages
         public async void CanvasKeyUp(int keyCode)
         {
             Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
-
+            _gameEngine.OnKeyUp(keyCode);
             await Task.CompletedTask;
         }
 
 
         [JSInvokable]
-        public async void GameUpdate(double timestamp)
+        public async void GameUpdate(double delta)
         {
+            _gameEngine.Update(delta);
             await Task.CompletedTask;
         }
 
