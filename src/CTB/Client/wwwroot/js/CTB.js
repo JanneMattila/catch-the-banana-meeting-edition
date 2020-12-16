@@ -5,14 +5,16 @@ let _dotnetRef;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images = [];
-//window.addEventListener('resize', () => {
-//    console.log("resize");
-//    if (_canvasElement !== undefined) {
-//        _canvasElement.width = window.innerWidth * 0.8;
-//        _canvasElement.height = window.innerHeight * 0.8;
-//        CTB.draw(undefined);
-//    }
-//});
+const resizeCanvas = () => {
+    if (_canvasElement !== undefined) {
+        _canvasElement.width = window.innerWidth * 0.9;
+        _canvasElement.height = window.innerHeight * 0.9;
+    }
+};
+window.addEventListener('resize', () => {
+    console.log("resize");
+    resizeCanvas();
+});
 document.addEventListener('keydown', (event) => {
     if (_dotnetRef !== undefined) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
@@ -80,6 +82,7 @@ CTB.initialize = (canvasElement, dotnetRef) => {
     _canvasElement = canvasElement;
     _dotnetRef = dotnetRef;
     _context = _canvasElement.getContext("2d");
+    resizeCanvas();
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
     return getPlayerId();
