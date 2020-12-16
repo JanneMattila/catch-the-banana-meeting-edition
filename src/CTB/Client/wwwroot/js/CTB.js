@@ -2,6 +2,9 @@ var CTB = CTB || {};
 let _canvasElement;
 let _context;
 let _dotnetRef;
+let _imagesLoaded = 0;
+let _imagesToLoad = -1;
+const _images = [];
 //window.addEventListener('resize', () => {
 //    console.log("resize");
 //    if (_canvasElement !== undefined) {
@@ -20,7 +23,24 @@ document.addEventListener('keyup', (event) => {
         _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
     }
 });
-CTB.getPlayerId = () => {
+const loadImages = () => {
+    const files = [
+        "monkey1.png",
+        "monkey2.png",
+        "monkey3.png"
+    ];
+    _imagesToLoad = files.length;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const img = new Image();
+        img.onload = function () {
+            _imagesLoaded++;
+        };
+        img.src = "/images/" + file;
+        _images[i] = img;
+    }
+};
+const getPlayerId = () => {
     let id = "";
     const CatchTheBananaUserId = "CatchTheBananaUserId";
     const searchText = `${CatchTheBananaUserId}=`;
@@ -56,12 +76,13 @@ CTB.requestAnimationFrame = (timestamp) => {
 };
 CTB.initialize = (canvasElement, dotnetRef) => {
     console.log("=> initialize");
+    loadImages();
     _canvasElement = canvasElement;
     _dotnetRef = dotnetRef;
     _context = _canvasElement.getContext("2d");
     CTB.draw(undefined);
     CTB.requestAnimationFrame(0);
-    return CTB.getPlayerId();
+    return getPlayerId();
 };
 CTB.draw = (game) => {
     console.log("=> draw");
@@ -73,6 +94,9 @@ CTB.draw = (game) => {
     _context.fillStyle = "#8e2ec4";
     _context.fillRect(0, 0, _canvasElement.width, _canvasElement.height);
     _context.fill();
+    if (_imagesLoaded === _imagesToLoad) {
+        _context.drawImage(_images[0], _canvasElement.width / 2, _canvasElement.height / 2);
+    }
     _context.restore();
 };
 //# sourceMappingURL=CTB.js.map
