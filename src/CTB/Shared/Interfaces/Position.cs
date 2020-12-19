@@ -9,5 +9,11 @@ namespace CTB.Shared.Interfaces
 
         [JsonPropertyName("y")]
         public int Y { get; set; }
+
+        [JsonPropertyName("rotation")]
+        public double Rotation { get; set; }
+
+        [JsonPropertyName("speed")]
+        public int Speed { get; set; }
     }
 }

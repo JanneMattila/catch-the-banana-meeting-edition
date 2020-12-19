@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CTB.Server.Data;
 using CTB.Server.Logic;
 using CTB.Shared;
+using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CTB.Server.Hubs
@@ -32,9 +33,9 @@ namespace CTB.Server.Hubs
             await Clients.Caller.SendAsync(HubConstants.PlayerNameEventMethod, name);
         }
 
-        public async Task MoveEvent(string move)
+        public async Task MoveEvent(Position position)
         {
-            await Clients.All.SendAsync(HubConstants.MoveEventMethod, move);
+            await Clients.Others.SendAsync(HubConstants.MoveEventMethod, position);
         }
     }
 }

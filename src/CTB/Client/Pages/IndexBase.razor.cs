@@ -35,6 +35,8 @@ namespace CTB.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             _gameEngine.SetExecuteDraw(async (game) => await JSRuntime.InvokeAsync<string>("CTB.draw", game));
+            _gameEngine.SetExecutePlayerUpdated(async (position) => await _hubConnection.InvokeAsync(HubConstants.MoveEventMethod, position));
+
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();

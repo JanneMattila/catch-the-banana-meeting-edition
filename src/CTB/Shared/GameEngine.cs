@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CTB.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace CTB.Shared
     {
         private Game _game = new();
         private Action<Game> _executeDraw;
+        private Action<Position> _executePlayerUpdated;
         private HashSet<int> _keys = new();
 
         public Game Game { get => _game; }
@@ -17,6 +19,11 @@ namespace CTB.Shared
         public void SetExecuteDraw(Action<Game> executeDraw)
         {
             _executeDraw = executeDraw;
+        }
+
+        public void SetExecutePlayerUpdated(Action<Position> executePlayerUpdated)
+        {
+            _executePlayerUpdated = executePlayerUpdated;
         }
 
         public void SetPlayerID(string playerID)
@@ -32,20 +39,36 @@ namespace CTB.Shared
         public void OnKeyDown(int keyCode)
         {
             _keys.Add(keyCode);
+            KeyboardStateChanged();
         }
 
         public void OnKeyUp(int keyCode)
         {
             _keys.Remove(keyCode);
+            KeyboardStateChanged();
+        }
+
+        private void KeyboardStateChanged()
+        {
+            (var rotation, var movePlayer, var changed) = HandleKeyboard();
+            if (!movePlayer)
+            {
+                _game.Me.Position.Rotation = rotation;
+                _game.Me.Position.Speed = 0;
+            }
+
+            if (changed)
+            {
+                _executePlayerUpdated(_game.Me.Position);
+            }
         }
 
         public void Update(double delta)
         {
-            (var rotation, var movePlayer) = HandleKeyboard();
-            if (movePlayer)
+            if (_game.Me.Position.Speed > 0)
             {
-                _game.Me.Position.X += (int)Math.Round(delta / 6_000 * Math.Cos(rotation));
-                _game.Me.Position.Y += (int)Math.Round(delta / 6_000 * Math.Sin(rotation));
+                _game.Me.Position.X += (int)Math.Round(delta / 6_000 * Math.Cos(_game.Me.Position.Rotation));
+                _game.Me.Position.Y += (int)Math.Round(delta / 6_000 * Math.Sin(_game.Me.Position.Rotation));
 
                 Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
             }
@@ -53,10 +76,13 @@ namespace CTB.Shared
             _executeDraw(_game);
         }
 
-        private (double, bool) HandleKeyboard()
+        private (double, bool, bool) HandleKeyboard()
         {
             var rotation = 0d;
             var movePlayer = false;
+
+            var previousMovePlayer = _game.Me.Position.Speed > 0;
+            var previousRotation = _game.Me.Position.Rotation;
             if (_keys.Contains(Keys.Up) || _keys.Contains(Keys.KeyW))
             {
                 movePlayer = true;
@@ -92,7 +118,10 @@ namespace CTB.Shared
             {
                 movePlayer = true;
             }
-            return (rotation, movePlayer);
+            var changed = 
+                previousMovePlayer != movePlayer ||
+                previousRotation != rotation;
+            return (rotation, movePlayer, changed);
         }
     }
 }
