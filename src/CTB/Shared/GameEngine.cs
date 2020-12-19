@@ -41,37 +41,58 @@ namespace CTB.Shared
 
         public void Update(double delta)
         {
-            var rotation = 0d;
-            var movePlayer = false;
-            if (_keys.Contains(Keys.Up) || _keys.Contains(Keys.KeyW))
-            {
-                rotation = 3 * Math.PI / 2;
-                movePlayer = true;
-            }
-            if (_keys.Contains(Keys.Down) || _keys.Contains(Keys.KeyS))
-            {
-                rotation = Math.PI / 2;
-                movePlayer = true;
-            }
-            if (_keys.Contains(Keys.Left) || _keys.Contains(Keys.KeyA))
-            {
-                rotation = Math.PI;
-                movePlayer = true;
-            }
-            if (_keys.Contains(Keys.Right) || _keys.Contains(Keys.KeyD))
-            {
-                movePlayer = true;
-            }
-
+            (var rotation, var movePlayer) = HandleKeyboard();
             if (movePlayer)
             {
-                _game.Me.Position.X += (int)Math.Round(delta / 5000 * Math.Cos(rotation));
-                _game.Me.Position.Y += (int)Math.Round(delta / 5000 * Math.Sin(rotation));
+                _game.Me.Position.X += (int)Math.Round(delta / 6_000 * Math.Cos(rotation));
+                _game.Me.Position.Y += (int)Math.Round(delta / 6_000 * Math.Sin(rotation));
 
                 Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
             }
 
             _executeDraw(_game);
+        }
+
+        private (double, bool) HandleKeyboard()
+        {
+            var rotation = 0d;
+            var movePlayer = false;
+            if (_keys.Contains(Keys.Up) || _keys.Contains(Keys.KeyW))
+            {
+                movePlayer = true;
+                rotation = 3 * Math.PI / 2;
+                if (_keys.Contains(Keys.Left) || _keys.Contains(Keys.KeyA))
+                {
+                    rotation = 4 * Math.PI / 3;
+                }
+                else if (_keys.Contains(Keys.Right) || _keys.Contains(Keys.KeyD))
+                {
+                    rotation = 5 * Math.PI / 3;
+                }
+            }
+            else if (_keys.Contains(Keys.Down) || _keys.Contains(Keys.KeyS))
+            {
+                movePlayer = true;
+                rotation = Math.PI / 2;
+                if (_keys.Contains(Keys.Left) || _keys.Contains(Keys.KeyA))
+                {
+                    rotation = 2 * Math.PI / 3;
+                }
+                else if (_keys.Contains(Keys.Right) || _keys.Contains(Keys.KeyD))
+                {
+                    rotation = Math.PI / 3;
+                }
+            }
+            else if (_keys.Contains(Keys.Left) || _keys.Contains(Keys.KeyA))
+            {
+                rotation = Math.PI;
+                movePlayer = true;
+            }
+            else if (_keys.Contains(Keys.Right) || _keys.Contains(Keys.KeyD))
+            {
+                movePlayer = true;
+            }
+            return (rotation, movePlayer);
         }
     }
 }
