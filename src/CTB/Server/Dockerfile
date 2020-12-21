@@ -8,16 +8,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0.101-focal-amd64 AS build
 
-#WORKDIR /node
-#ENV NODE_VERSION 14.15.3
-#RUN apt-get update -qq && \
-    #apt-get dist-upgrade --no-install-recommends -y && \
-    #apt-get install -y --no-install-recommends xz-utils
-#
-#RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"
-#RUN tar -xf "/node/node-v$NODE_VERSION-linux-x64.tar.xz"
-#ENV PATH=$PATH:/node/node-v$NODE_VERSION-linux-x64/bin
-#
+WORKDIR /node
+ENV NODE_VERSION 14.15.3
+RUN apt-get update -qq && \
+    apt-get dist-upgrade --no-install-recommends -y && \
+    apt-get install -y --no-install-recommends xz-utils
+
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"
+RUN tar -xf "/node/node-v$NODE_VERSION-linux-x64.tar.xz"
+ENV PATH=$PATH:/node/node-v$NODE_VERSION-linux-x64/bin
+
 # Cache nuget restore
 WORKDIR /build
 COPY ["src/CTB/Server/CTB.Server.csproj", "src/CTB/Server/"]
