@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{736CD13B-5059-4605-9DF7-F144A711D360}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -27,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4A452F3D-7ED
 		doc\misc.md = doc\misc.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageCreator", "src\ImageCreator\ImageCreator.csproj", "{1EF3B6F2-8965-4AEE-B4F1-BF3CEDA6BBFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageCreator", "src\ImageCreator\ImageCreator.csproj", "{1EF3B6F2-8965-4AEE-B4F1-BF3CEDA6BBFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
