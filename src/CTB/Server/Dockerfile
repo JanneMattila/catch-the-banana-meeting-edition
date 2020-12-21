@@ -23,7 +23,7 @@ WORKDIR /src
 COPY ["src/CTB/Server/CTB.Server.csproj", "Server/"]
 COPY ["src/CTB/Client/CTB.Client.csproj", "Client/"]
 COPY ["src/CTB/Shared/CTB.Shared.csproj", "Shared/"]
-RUN dotnet restore "src/Server/CTB.Server.csproj"
+RUN dotnet restore "Server/CTB.Server.csproj"
 
 # Copy sources and compile
 COPY . .
