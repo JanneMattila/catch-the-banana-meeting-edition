@@ -20,9 +20,9 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0.101-focal-amd64 AS build
 #
 # Cache nuget restore
 WORKDIR /src
-COPY ["src/CTB/Server/CTB.Server.csproj", "src/CTB.Server/"]
-COPY ["src/CTB/Client/CTB.Client.csproj", "src/CTB.Client/"]
-COPY ["src/CTB/Shared/CTB.Shared.csproj", "src/CTB/"]
+COPY ["src/CTB/Server/CTB.Server.csproj", "CTB.Server/"]
+COPY ["src/CTB/Client/CTB.Client.csproj", "CTB.Client/"]
+COPY ["src/CTB/Shared/CTB.Shared.csproj", "CTB/"]
 RUN dotnet restore "src/CTB.Server/CTB.Server.csproj"
 
 # Copy sources and compile
