@@ -115,7 +115,7 @@ namespace CTB.Shared
             {
                 movePlayer = true;
             }
-            var changed = 
+            var changed =
                 previousMovePlayer != movePlayer ||
                 previousRotation != rotation;
             return (rotation, movePlayer, changed);
@@ -125,6 +125,41 @@ namespace CTB.Shared
         {
             _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
             _game.Monkeys.Add(monkey);
+        }
+
+        private double FixAngle(double angle)
+        {
+            if (angle < 0)
+            {
+                angle += 2 * Math.PI;
+            }
+            else if (angle > 2 * Math.PI)
+            {
+                angle -= 2 * Math.PI;
+            }
+            return angle;
+        }
+
+        public void OnCanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
+        {
+            if (leftTouchStart != null && leftTouchCurrent != null)
+            {
+                var touchx = leftTouchCurrent.X - leftTouchStart.X;
+                var touchy = leftTouchCurrent.Y - leftTouchStart.Y;
+                var angle = Math.Atan2(touchy, touchx);
+                angle = angle < 0 ? Math.PI * 2 + angle : angle;
+                _game.Me.Position.Rotation = angle;
+                //var rotation = _game.Me.Position.Rotation;
+                //var deltaLeft = FixAngle(rotation - angle);
+                //var deltaRight = FixAngle(angle - _game.Me.Position.Rotation);
+                var len = Math.Sqrt(touchx * touchx + touchy * touchy);
+                _game.Me.Position.Speed = len > 40 ? 1 : 0;
+            }
+            else
+            {
+                _game.Me.Position.Rotation = 0;
+                _game.Me.Position.Speed = 0;
+            }
         }
     }
 }

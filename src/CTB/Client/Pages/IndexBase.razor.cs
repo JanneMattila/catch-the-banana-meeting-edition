@@ -115,6 +115,13 @@ namespace CTB.Client.Pages
             await Task.CompletedTask;
         }
 
+        [JSInvokable]
+        public async void CanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
+        {
+            Console.WriteLine($"-> CanvasTouch");
+            _gameEngine.OnCanvasTouch(leftTouchStart, leftTouchCurrent, rightTouchCurrent);
+            await Task.CompletedTask;
+        }
 
         [JSInvokable]
         public async void GameUpdate(double delta)

@@ -1,7 +1,12 @@
 var CTB = CTB || {};
+class CanvasTouch {
+}
 let _canvasElement;
 let _context;
 let _dotnetRef;
+let _leftTouchStart = undefined;
+let _leftTouchCurrent = undefined;
+let _rightTouchCurrent = undefined;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images = [];
@@ -25,6 +30,85 @@ document.addEventListener('keyup', (event) => {
         _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
     }
 });
+const setTouchHandlers = (canvas) => {
+    canvas.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            const touch = event.changedTouches[i];
+            if (touch.clientX < canvas.width / 2) {
+                _leftTouchStart = {
+                    id: touch.identifier,
+                    x: touch.clientX,
+                    y: touch.clientY
+                };
+                _leftTouchCurrent = undefined;
+            }
+            else {
+                _rightTouchCurrent = {
+                    id: touch.identifier,
+                    x: touch.clientX,
+                    y: touch.clientY
+                };
+            }
+        }
+        if (_dotnetRef !== undefined) {
+            _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
+        }
+    }, false);
+    canvas.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            const touch = event.changedTouches[i];
+            if (touch.clientX < canvas.width / 2) {
+                _leftTouchStart = undefined;
+                _leftTouchCurrent = undefined;
+            }
+            else {
+                _rightTouchCurrent = undefined;
+            }
+        }
+        if (_dotnetRef !== undefined) {
+            _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
+        }
+    }, false);
+    canvas.addEventListener('touchcancel', (event) => {
+        event.preventDefault();
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            const touch = event.changedTouches[i];
+            if (touch.clientX < canvas.width / 2) {
+                _leftTouchStart = undefined;
+                _leftTouchCurrent = undefined;
+            }
+            else {
+                _rightTouchCurrent = undefined;
+            }
+        }
+        if (_dotnetRef !== undefined) {
+            _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
+        }
+    }, false);
+    canvas.addEventListener('touchmove', (event) => {
+        event.preventDefault();
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            const touch = event.changedTouches[i];
+            if (_leftTouchStart !== undefined && _leftTouchStart.id === touch.identifier) {
+                _leftTouchCurrent = new CanvasTouch();
+                _leftTouchCurrent.id = touch.identifier;
+                _leftTouchCurrent.x = touch.clientX;
+                _leftTouchCurrent.y = touch.clientY;
+            }
+            else if (_rightTouchCurrent !== undefined && _rightTouchCurrent.id === touch.identifier) {
+                _rightTouchCurrent = new CanvasTouch();
+                _rightTouchCurrent.id = touch.identifier;
+                _rightTouchCurrent.x = touch.clientX;
+                _rightTouchCurrent.y = touch.clientY;
+            }
+        }
+        if (_dotnetRef !== undefined) {
+            _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
+        }
+    }, false);
+};
 const loadImages = () => {
     const files = [
         "monkey1.png",
@@ -80,6 +164,7 @@ CTB.initialize = (canvasElement, dotnetRef) => {
     console.log("=> initialize");
     loadImages();
     _canvasElement = canvasElement;
+    setTouchHandlers(_canvasElement);
     _dotnetRef = dotnetRef;
     _context = _canvasElement.getContext("2d");
     resizeCanvas();
