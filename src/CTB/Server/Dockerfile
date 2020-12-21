@@ -19,15 +19,15 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0.101-focal-amd64 AS build
 #ENV PATH=$PATH:/node/node-v$NODE_VERSION-linux-x64/bin
 #
 # Cache nuget restore
-WORKDIR /src
-COPY ["src/CTB/Server/CTB.Server.csproj", "Server/"]
-COPY ["src/CTB/Client/CTB.Client.csproj", "Client/"]
-COPY ["src/CTB/Shared/CTB.Shared.csproj", "Shared/"]
-RUN dotnet restore "Server/CTB.Server.csproj"
+WORKDIR /build
+COPY ["src/CTB/Server/CTB.Server.csproj", "src/CTB/Server/"]
+COPY ["src/CTB/Client/CTB.Client.csproj", "src/CTB/Client/"]
+COPY ["src/CTB/Shared/CTB.Shared.csproj", "src/CTB/Shared/"]
+RUN dotnet restore "src/CTB/Server/CTB.Server.csproj"
 
 # Copy sources and compile
 COPY . .
-WORKDIR "/src/Server"
+WORKDIR "/build/src/CTB/Server"
 RUN dotnet build "CTB.Server.csproj" -c Release -o /app/build
 
 # 2. Release image
