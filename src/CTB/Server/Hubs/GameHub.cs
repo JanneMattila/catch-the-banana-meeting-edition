@@ -29,7 +29,7 @@ namespace CTB.Server.Hubs
 
         public async Task PlayerIDEvent(string playerID)
         {
-            var name = _repository.GetName(playerID);
+            var name = _repository.Get(playerID).Name;
             await Clients.Caller.SendAsync(HubConstants.PlayerNameEventMethod, name);
         }
 

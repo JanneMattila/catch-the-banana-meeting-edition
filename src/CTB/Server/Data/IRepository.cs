@@ -1,7 +1,9 @@
-﻿namespace CTB.Server.Data
+﻿using CTB.Shared.Interfaces;
+
+namespace CTB.Server.Data
 {
     public interface IRepository
     {
-        string GetName(string playerID);
+        Monkey Get(string playerID);
     }
 }

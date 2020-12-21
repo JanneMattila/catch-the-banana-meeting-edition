@@ -14,7 +14,7 @@ namespace CTB.Shared.Interfaces
         public int Score { get; set; }
 
         [JsonPropertyName("ui")]
-        public string UI { get; set; }
+        public int UI { get; set; }
 
         [JsonPropertyName("position")]
         public Position Position { get; set; } = new();

@@ -51,11 +51,8 @@ namespace CTB.Shared
         private void KeyboardStateChanged()
         {
             (var rotation, var movePlayer, var changed) = HandleKeyboard();
-            if (!movePlayer)
-            {
-                _game.Me.Position.Rotation = rotation;
-                _game.Me.Position.Speed = 0;
-            }
+            _game.Me.Position.Speed = movePlayer ? 1 : 0;
+            _game.Me.Position.Rotation = rotation;
 
             if (changed)
             {
@@ -122,6 +119,12 @@ namespace CTB.Shared
                 previousMovePlayer != movePlayer ||
                 previousRotation != rotation;
             return (rotation, movePlayer, changed);
+        }
+
+        public void OtherPlayerUpdate(Monkey monkey)
+        {
+            _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
+            _game.Monkeys.Add(monkey);
         }
     }
 }

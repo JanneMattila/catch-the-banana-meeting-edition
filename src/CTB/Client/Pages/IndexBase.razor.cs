@@ -1,4 +1,5 @@
 ﻿using CTB.Shared;
+using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -47,9 +48,9 @@ namespace CTB.Client.Pages
                 StateHasChanged();
             });
 
-            _hubConnection.On(HubConstants.MoveEventMethod, () =>
+            _hubConnection.On(HubConstants.MoveEventMethod, (Monkey monkey) =>
             {
-                MoveEventReceived();
+                MoveEventReceived(monkey);
                 StateHasChanged();
             });
 
@@ -79,9 +80,10 @@ namespace CTB.Client.Pages
             WelcomeVisibility = ElementVisibility.Inline;
         }
 
-        private void MoveEventReceived()
+        private void MoveEventReceived(Monkey monkey)
         {
             Console.WriteLine("-> MoveEventReceived");
+            Console.WriteLine(monkey);
         }
 
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)
