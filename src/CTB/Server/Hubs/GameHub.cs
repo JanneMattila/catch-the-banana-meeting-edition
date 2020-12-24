@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CTB.Server.Data;
 using CTB.Server.Logic;
@@ -11,6 +13,7 @@ namespace CTB.Server.Hubs
     public class GameHub : Hub
     {
         private readonly IRepository _repository;
+        private static ConcurrentDictionary<string, Monkey> s_monkeys = new ConcurrentDictionary<string, Monkey>();
 
         public GameHub(IRepository repository)
         {
@@ -24,18 +27,23 @@ namespace CTB.Server.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            s_monkeys.Remove(Context.ConnectionId, out var _);
             return base.OnDisconnectedAsync(exception);
         }
 
         public async Task PlayerIDEvent(string playerID)
         {
-            var name = _repository.Get(playerID).Name;
-            await Clients.Caller.SendAsync(HubConstants.PlayerNameEventMethod, name);
+            var monkey = _repository.Get(playerID);
+
+            s_monkeys.AddOrUpdate(Context.ConnectionId, monkey, (key, previous) => { return monkey; });
+            await Clients.Caller.SendAsync(HubConstants.PlayerNameEventMethod, monkey.Name);
         }
 
         public async Task MoveEvent(Position position)
         {
-            await Clients.Others.SendAsync(HubConstants.MoveEventMethod, position);
+            var monkey = s_monkeys[Context.ConnectionId];
+            monkey.Position = position;
+            await Clients.Others.SendAsync(HubConstants.MoveEventMethod, monkey);
         }
     }
 }

@@ -70,6 +70,15 @@ namespace CTB.Shared
                 //Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
             }
 
+            foreach (var monkey in _game.Monkeys)
+            {
+                if (monkey.Position.Speed > 0)
+                {
+                    monkey.Position.X += (int)Math.Round(delta / 10 * Math.Cos(monkey.Position.Rotation));
+                    monkey.Position.Y += (int)Math.Round(delta / 10 * Math.Sin(monkey.Position.Rotation));
+                }
+            }
+
             _executeDraw(_game);
         }
 

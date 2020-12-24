@@ -82,8 +82,8 @@ namespace CTB.Client.Pages
 
         private void MoveEventReceived(Monkey monkey)
         {
-            Console.WriteLine("-> MoveEventReceived");
-            Console.WriteLine(monkey);
+            //Console.WriteLine("-> MoveEventReceived");
+            _gameEngine.OtherPlayerUpdate(monkey);
         }
 
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)

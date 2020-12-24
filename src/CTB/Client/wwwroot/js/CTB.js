@@ -188,7 +188,11 @@ CTB.draw = (game) => {
     _context.scale(scale, scale);
     if (game !== undefined) {
         if (_imagesLoaded === _imagesToLoad) {
-            _context.drawImage(_images[0], game.me.position.x, game.me.position.y);
+            for (let i = 0; i < game.monkeys.length; i++) {
+                const monkey = game.monkeys[i];
+                _context.drawImage(_images[monkey.ui], monkey.position.x, monkey.position.y);
+            }
+            _context.drawImage(_images[game.me.ui], game.me.position.x, game.me.position.y);
         }
     }
     _context.restore();
