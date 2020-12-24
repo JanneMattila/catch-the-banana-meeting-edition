@@ -7,6 +7,7 @@ class CanvasTouch {
     y: number;
 }
 
+let _timestamp = 0;
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
 let _dotnetRef: any;
@@ -16,7 +17,7 @@ let _rightTouchCurrent: CanvasTouch = undefined;
 
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
-const _images = [];
+const _images: Array<HTMLImageElement> = [];
 
 const resizeCanvas = () => {
     if (_canvasElement !== undefined) {
@@ -174,8 +175,10 @@ const getPlayerId = () => {
 }
 
 CTB.requestAnimationFrame = (timestamp: number) => {
+    const delta = timestamp - _timestamp;
+    _timestamp = timestamp;
     if (_dotnetRef !== undefined) {
-        _dotnetRef.invokeMethod("GameUpdate", timestamp);
+        _dotnetRef.invokeMethod("GameUpdate", delta);
     }
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 }
@@ -203,10 +206,13 @@ CTB.draw = (game) => {
     }
 
     _context.save();
+    _context.imageSmoothingEnabled = false;
     _context.fillStyle = "#8e2ec4";
     _context.fillRect(0, 0, _canvasElement.width, _canvasElement.height);
     _context.fill();
 
+    const scale = 2;
+    _context.scale(scale, scale);
     if (game !== undefined) {
         if (_imagesLoaded === _imagesToLoad) {
             _context.drawImage(_images[0], game.me.position.x, game.me.position.y);

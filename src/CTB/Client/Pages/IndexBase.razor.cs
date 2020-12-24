@@ -88,13 +88,13 @@ namespace CTB.Client.Pages
 
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)
         {
-            Console.WriteLine("-> CanvasOnClick");
+            //Console.WriteLine("-> CanvasOnClick");
             await Task.CompletedTask;
         }
 
         protected void LetsPlayOnClick()
         {
-            Console.WriteLine("-> LetsPlayOnClick");
+            //Console.WriteLine("-> LetsPlayOnClick");
             WelcomeVisibility = ElementVisibility.None;
         }
 
@@ -102,7 +102,7 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasKeyDown(int keyCode)
         {
-            Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
+            //Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
             _gameEngine.OnKeyDown(keyCode);
             await Task.CompletedTask;
         }
@@ -110,7 +110,7 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasKeyUp(int keyCode)
         {
-            Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
+            //Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
             _gameEngine.OnKeyUp(keyCode);
             await Task.CompletedTask;
         }
@@ -118,7 +118,7 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
         {
-            Console.WriteLine($"-> CanvasTouch");
+            //Console.WriteLine($"-> CanvasTouch");
             _gameEngine.OnCanvasTouch(leftTouchStart, leftTouchCurrent, rightTouchCurrent);
             await Task.CompletedTask;
         }

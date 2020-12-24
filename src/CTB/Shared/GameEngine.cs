@@ -64,10 +64,10 @@ namespace CTB.Shared
         {
             if (_game.Me.Position.Speed > 0)
             {
-                _game.Me.Position.X += (int)Math.Round(delta / 6_000 * Math.Cos(_game.Me.Position.Rotation));
-                _game.Me.Position.Y += (int)Math.Round(delta / 6_000 * Math.Sin(_game.Me.Position.Rotation));
+                _game.Me.Position.X += (int)Math.Round(delta / 10 * Math.Cos(_game.Me.Position.Rotation));
+                _game.Me.Position.Y += (int)Math.Round(delta / 10 * Math.Sin(_game.Me.Position.Rotation));
 
-                Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
+                //Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
             }
 
             _executeDraw(_game);
@@ -153,7 +153,7 @@ namespace CTB.Shared
                 //var deltaLeft = FixAngle(rotation - angle);
                 //var deltaRight = FixAngle(angle - _game.Me.Position.Rotation);
                 var len = Math.Sqrt(touchx * touchx + touchy * touchy);
-                _game.Me.Position.Speed = len > 40 ? 1 : 0;
+                _game.Me.Position.Speed = len > 20 ? 1 : 0;
             }
             else
             {
