@@ -31,9 +31,12 @@ namespace CTB.Shared
             _game.Me.ID = playerID;
         }
 
-        public void SetPlayerName(string playerName)
+        public void SetPlayer(Monkey monkey)
         {
-            _game.Me.Name = playerName;
+            _game.Me.Name = monkey.Name;
+            _game.Me.UI = monkey.UI;
+            _game.Me.Score = monkey.Score;
+            _game.Me.Position = monkey.Position;
         }
 
         public void OnKeyDown(int keyCode)

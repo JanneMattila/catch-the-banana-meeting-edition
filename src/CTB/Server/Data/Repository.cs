@@ -27,8 +27,8 @@ namespace CTB.Server.Data
                 UI = _random.Next(1, 3),
                 Position = new Position()
                 {
-                    X = _random.Next(10, 500),
-                    Y = _random.Next(10, 500)
+                    X = _random.Next(10, 150),
+                    Y = _random.Next(10, 150)
                 }
             };
             return s_players[playerID];

@@ -36,7 +36,7 @@ namespace CTB.Server.Hubs
             var monkey = _repository.Get(playerID);
 
             s_monkeys.AddOrUpdate(Context.ConnectionId, monkey, (key, previous) => { return monkey; });
-            await Clients.Caller.SendAsync(HubConstants.PlayerNameEventMethod, monkey.Name);
+            await Clients.Caller.SendAsync(HubConstants.PlayerRegisteredEventMethod, monkey);
         }
 
         public async Task MoveEvent(Position position)

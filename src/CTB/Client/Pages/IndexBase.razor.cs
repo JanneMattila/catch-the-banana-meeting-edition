@@ -42,9 +42,9 @@ namespace CTB.Client.Pages
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();
 
-            _hubConnection.On(HubConstants.PlayerNameEventMethod, (string name) =>
+            _hubConnection.On(HubConstants.PlayerRegisteredEventMethod, (Monkey monkey) =>
             {
-                NamePlayerEventReceived(name);
+                PlayerRegisteredEventMethod(monkey);
                 StateHasChanged();
             });
 
@@ -72,10 +72,9 @@ namespace CTB.Client.Pages
             }
         }
 
-        private void NamePlayerEventReceived(string name)
+        private void PlayerRegisteredEventMethod(Monkey monkey)
         {
-            Console.WriteLine($"-> NamePlayerEventReceived: {name}");
-            _gameEngine.SetPlayerName(name);
+            _gameEngine.SetPlayer(monkey);
 
             WelcomeVisibility = ElementVisibility.Inline;
         }
@@ -102,7 +101,7 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasKeyDown(int keyCode)
         {
-            //Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
+            Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
             _gameEngine.OnKeyDown(keyCode);
             await Task.CompletedTask;
         }
@@ -110,7 +109,7 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasKeyUp(int keyCode)
         {
-            //Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
+            Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
             _gameEngine.OnKeyUp(keyCode);
             await Task.CompletedTask;
         }

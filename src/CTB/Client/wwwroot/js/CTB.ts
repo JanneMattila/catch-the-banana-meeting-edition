@@ -32,13 +32,13 @@ window.addEventListener('resize', () => {
 });
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
-    if (_dotnetRef !== undefined) {
+    if (_dotnetRef !== undefined && !event.altKey && !event.ctrlKey) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
     }
 });
 
 document.addEventListener('keyup', (event: KeyboardEvent) => {
-    if (_dotnetRef !== undefined) {
+    if (_dotnetRef !== undefined && !event.altKey && !event.ctrlKey) {
         _dotnetRef.invokeMethod("CanvasKeyUp", event.keyCode);
     }
 });
