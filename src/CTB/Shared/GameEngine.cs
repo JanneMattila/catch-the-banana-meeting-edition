@@ -139,6 +139,17 @@ namespace CTB.Shared
             _game.Monkeys.Add(monkey);
         }
 
+
+        public void OtherPlayerConnected(Monkey monkey)
+        {
+            OtherPlayerUpdate(monkey);
+        }
+
+        public void OtherPlayerDisconnected(Monkey monkey)
+        {
+            _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
+        }
+
         private double FixAngle(double angle)
         {
             if (angle < 0)
@@ -154,6 +165,9 @@ namespace CTB.Shared
 
         public void OnCanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
         {
+            var previousRotation = _game.Me.Position.Rotation;
+            var previousSpeed = _game.Me.Position.Speed;
+
             if (leftTouchStart != null && leftTouchCurrent != null)
             {
                 var touchx = leftTouchCurrent.X - leftTouchStart.X;
@@ -171,6 +185,12 @@ namespace CTB.Shared
             {
                 _game.Me.Position.Rotation = 0;
                 _game.Me.Position.Speed = 0;
+            }
+
+            if (previousRotation != _game.Me.Position.Rotation ||
+                previousSpeed != _game.Me.Position.Speed)
+            {
+                _executePlayerUpdated(_game.Me.Position);
             }
         }
     }

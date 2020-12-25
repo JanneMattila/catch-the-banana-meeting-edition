@@ -22,13 +22,21 @@ namespace CTB.Server.Hubs
 
         public override async Task OnConnectedAsync()
         {
+            foreach (var monkey in s_monkeys)
+            {
+                await Clients.Caller.SendAsync(HubConstants.MonkeyConnectedEventMethod, monkey);
+            }
+
             await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
+            var monkey = s_monkeys[Context.ConnectionId];
+            await Clients.Others.SendAsync(HubConstants.MonkeyDisconnectedEventMethod, monkey);
+
             s_monkeys.Remove(Context.ConnectionId, out var _);
-            return base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception);
         }
 
         public async Task PlayerIDEvent(string playerID)
@@ -37,6 +45,7 @@ namespace CTB.Server.Hubs
 
             s_monkeys.AddOrUpdate(Context.ConnectionId, monkey, (key, previous) => { return monkey; });
             await Clients.Caller.SendAsync(HubConstants.PlayerRegisteredEventMethod, monkey);
+            await Clients.Others.SendAsync(HubConstants.MonkeyConnectedEventMethod, monkey);
         }
 
         public async Task MoveEvent(Position position)

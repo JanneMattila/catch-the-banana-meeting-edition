@@ -54,9 +54,30 @@ namespace CTB.Client.Pages
                 StateHasChanged();
             });
 
+            _hubConnection.On(HubConstants.MonkeyConnectedEventMethod, (Monkey monkey) =>
+            {
+                MonkeyConnected(monkey);
+                StateHasChanged();
+            });
+
+            _hubConnection.On(HubConstants.MonkeyDisconnectedEventMethod, (Monkey monkey) =>
+            {
+                MonkeyDisconnected(monkey);
+                StateHasChanged();
+            });
+
             await _hubConnection.StartAsync();
 
             await base.OnInitializedAsync();
+        }
+        private void MonkeyConnected(Monkey monkey)
+        {
+            _gameEngine.OtherPlayerConnected(monkey);
+        }
+
+        private void MonkeyDisconnected(Monkey monkey)
+        {
+            _gameEngine.OtherPlayerDisconnected(monkey);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -81,27 +102,22 @@ namespace CTB.Client.Pages
 
         private void MoveEventReceived(Monkey monkey)
         {
-            //Console.WriteLine("-> MoveEventReceived");
             _gameEngine.OtherPlayerUpdate(monkey);
         }
 
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)
         {
-            //Console.WriteLine("-> CanvasOnClick");
             await Task.CompletedTask;
         }
 
         protected void LetsPlayOnClick()
         {
-            //Console.WriteLine("-> LetsPlayOnClick");
             WelcomeVisibility = ElementVisibility.None;
         }
-
 
         [JSInvokable]
         public async void CanvasKeyDown(int keyCode)
         {
-            Console.WriteLine($"-> CanvasKeyDown: {keyCode}");
             _gameEngine.OnKeyDown(keyCode);
             await Task.CompletedTask;
         }
@@ -109,7 +125,6 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasKeyUp(int keyCode)
         {
-            Console.WriteLine($"-> CanvasKeyUp: {keyCode}");
             _gameEngine.OnKeyUp(keyCode);
             await Task.CompletedTask;
         }
@@ -117,7 +132,6 @@ namespace CTB.Client.Pages
         [JSInvokable]
         public async void CanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
         {
-            //Console.WriteLine($"-> CanvasTouch");
             _gameEngine.OnCanvasTouch(leftTouchStart, leftTouchCurrent, rightTouchCurrent);
             await Task.CompletedTask;
         }
