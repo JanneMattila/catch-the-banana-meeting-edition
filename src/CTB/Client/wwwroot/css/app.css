@@ -18,6 +18,7 @@ html, body {
 
 .game {
     position: absolute;
+    border-radius: 10px;
     top: 5%;
     left: 5%;
     width: 90%;
