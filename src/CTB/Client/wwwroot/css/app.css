@@ -3,10 +3,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: #3e1654;
-
-    /* Prevent pull to refresh */
-    touch-action: manipulation;
-    overscroll-behavior-y: contain;
+    touch-action: none;
 }
 
 .gameWrapper {

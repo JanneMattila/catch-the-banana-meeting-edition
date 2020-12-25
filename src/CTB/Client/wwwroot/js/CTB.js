@@ -32,64 +32,64 @@ document.addEventListener('keyup', (event) => {
     }
 });
 const setTouchHandlers = (canvas) => {
-    canvas.addEventListener('touchstart', (event) => {
-        event.preventDefault();
+    document.addEventListener('touchstart', (event) => {
+        //event.preventDefault();
         for (let i = 0; i < event.changedTouches.length; i++) {
             const touch = event.changedTouches[i];
-            if (touch.clientX < canvas.width / 2) {
-                _leftTouchStart = {
-                    id: touch.identifier,
-                    x: touch.clientX,
-                    y: touch.clientY
-                };
-                _leftTouchCurrent = undefined;
-            }
-            else {
-                _rightTouchCurrent = {
-                    id: touch.identifier,
-                    x: touch.clientX,
-                    y: touch.clientY
-                };
-            }
+            //if (touch.clientX < canvas.width / 2) {
+            _leftTouchStart = {
+                id: touch.identifier,
+                x: touch.clientX,
+                y: touch.clientY
+            };
+            _leftTouchCurrent = undefined;
+            //}
+            //else {
+            //    _rightTouchCurrent = {
+            //        id: touch.identifier,
+            //        x: touch.clientX,
+            //        y: touch.clientY
+            //    } as CanvasTouch;
+            //}
         }
         if (_dotnetRef !== undefined) {
             _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
         }
     }, false);
-    canvas.addEventListener('touchend', (event) => {
-        event.preventDefault();
+    document.addEventListener('touchend', (event) => {
+        //event.preventDefault();
         for (let i = 0; i < event.changedTouches.length; i++) {
-            const touch = event.changedTouches[i];
-            if (touch.clientX < canvas.width / 2) {
-                _leftTouchStart = undefined;
-                _leftTouchCurrent = undefined;
-            }
-            else {
-                _rightTouchCurrent = undefined;
-            }
+            //const touch = event.changedTouches[i];
+            //if (touch.clientX < canvas.width / 2) {
+            _leftTouchStart = undefined;
+            _leftTouchCurrent = undefined;
+            //}
+            //else {
+            //    _rightTouchCurrent = undefined;
+            //}
         }
         if (_dotnetRef !== undefined) {
             _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
         }
     }, false);
-    canvas.addEventListener('touchcancel', (event) => {
-        event.preventDefault();
+    document.addEventListener('touchcancel', (event) => {
+        //event.preventDefault();
         for (let i = 0; i < event.changedTouches.length; i++) {
-            const touch = event.changedTouches[i];
-            if (touch.clientX < canvas.width / 2) {
-                _leftTouchStart = undefined;
-                _leftTouchCurrent = undefined;
-            }
-            else {
-                _rightTouchCurrent = undefined;
-            }
+            //const touch = event.changedTouches[i];
+            //if (touch.clientX < canvas.width / 2) {
+            _leftTouchStart = undefined;
+            _leftTouchCurrent = undefined;
+            //}
+            //else {
+            //    _rightTouchCurrent = undefined;
+            //}
         }
         if (_dotnetRef !== undefined) {
             _dotnetRef.invokeMethod("CanvasTouch", _leftTouchStart, _leftTouchCurrent, _rightTouchCurrent);
         }
     }, false);
-    canvas.addEventListener('touchmove', (event) => {
-        event.preventDefault();
+    document.addEventListener('touchmove', (event) => {
+        //event.preventDefault();
         for (let i = 0; i < event.changedTouches.length; i++) {
             const touch = event.changedTouches[i];
             if (_leftTouchStart !== undefined && _leftTouchStart.id === touch.identifier) {
