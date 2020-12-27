@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CTB.Server.Services
 {
-    public class GameEngineBackgroundService : IHostedService
+    public class GameEngineBackgroundService : BackgroundService
     {
         private readonly ILogger<GameEngineBackgroundService> _logger;
         private readonly IGameEngineServer _gameEngine;
@@ -19,12 +19,12 @@ namespace CTB.Server.Services
             _gameEngine = gameEngine;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var stopWatch = Stopwatch.StartNew();
             var update = stopWatch.Elapsed.Ticks;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 var timestamp = stopWatch.Elapsed.Ticks;
                 var delta = (timestamp - update) / (double)TimeSpan.TicksPerSecond;
@@ -37,7 +37,7 @@ namespace CTB.Server.Services
                 if (updates == 0)
                 {
                     // Wait for players to join
-                    await Task.Delay(100, cancellationToken);
+                    await Task.Delay(100, stoppingToken);
                 }
                 else
                 {
@@ -45,11 +45,6 @@ namespace CTB.Server.Services
                     await Task.CompletedTask;
                 }
             }
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }

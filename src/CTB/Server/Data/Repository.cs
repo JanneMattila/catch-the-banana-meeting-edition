@@ -10,6 +10,7 @@ namespace CTB.Server.Data
     public class Repository : IRepository
     {
         private ConcurrentDictionary<string, Monkey> _monkeys = new();
+        private ConcurrentDictionary<string, Shark> _sharks = new();
         private ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
         private Random _random = new Random();
 
@@ -66,6 +67,11 @@ namespace CTB.Server.Data
         public List<Monkey> GetMonkeys()
         {
             return _monkeys.Values.ToList();
+        }
+
+        public List<Shark> GetSharks()
+        {
+            return _sharks.Values.ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 using CTB.Server.Data;
 using CTB.Server.Hubs;
+using CTB.Server.Logic;
 using CTB.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,10 +23,11 @@ namespace CTB.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRepository, Repository>();
             services.AddSignalR();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<IRepository, Repository>();
+            services.AddSingleton<IGameEngineServer, GameEngineServer>();
             services.AddSingleton<IHostedService, GameEngineBackgroundService>();
         }
 

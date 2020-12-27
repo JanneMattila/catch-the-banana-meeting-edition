@@ -1,5 +1,7 @@
 ﻿using CTB.Server.Data;
+using CTB.Server.Hubs;
 using CTB.Shared.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,18 @@ namespace CTB.Server.Logic
     public class GameEngineServer : IGameEngineServer
     {
         private readonly IRepository _repository;
+        private readonly IHubContext<GameHub> _gameHub;
 
-        public GameEngineServer(IRepository repository)
+        public GameEngineServer(IRepository repository, IHubContext<GameHub> gameHub)
         {
             _repository = repository;
+            _gameHub = gameHub;
         }
 
         public int Update(double delta)
         {
-            foreach (var monkey in _repository.GetMonkeys())
+            var monkeys = _repository.GetMonkeys();
+            foreach (var monkey in monkeys)
             {
                 if (monkey.Position.Speed > 0)
                 {
