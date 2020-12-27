@@ -25,19 +25,50 @@ namespace ImageCreator
                 ". . . f d b f d b f f 0 f . . .\n" +
                 ". . . f d d c d d b b d f . . .\n" +
                 ". . . . f f f f f f f f f . . .";
-            Console.WriteLine(playerImageData);
+
+            var sharkImageData = "" +
+                ". . . . . . . . . . . . . . c c f f f f . . . . . . . . . . . . . . . \n" +
+                ". . . . . . . . . . . . . c d d b b b f . . . . . . . . . . . . . . . \n" +
+                ". . . . . . f f f f f f c d d b b b f . . . . . . . . . . . . . . . . \n" +
+                ". . . . f f b b b b b b b b b b b b b c f f f . . . . . . . c c c c c \n" +
+                ". . f f b b b b b b b b c b c b b b b b c c c f f . . . . c d b b b c \n" +
+                ". f b b b b b b b b b b c b b c b b b b c c c c c f f f c d d b b c . \n" +
+                "f b c b b b b b b b b b b c b c b b b b c c c c c c c c b d b b f . . \n" +
+                "f b b b b b b b 2 2 2 b b c b b b b b c c c c c c c c c c b b c f . . \n" +
+                "f f b b 1 1 1 1 2 2 2 b b c b b b b c c c c c c c b c f f b c c f . . \n" +
+                ". f f 1 1 1 1 1 1 1 1 1 b b b b c c c c c c b b b c c . . f b b c f . \n" +
+                ". . . c c c c c c c 1 1 1 b d b b b f d d b c c c . . . . . f f b b f \n" +
+                ". . . . . . . c c c c c c f b d b b b f c c . . . . . . . . . . f f f \n" +
+                ". . . . . . . . . . . . . . f f f f f f . . . . . . . . . . . . . . . ";
+
+            var bananaImageData = "" +
+                ". . . . . 5 f \n" +
+                ". . . 5 5 5 5 \n" +
+                ". . 5 5 5 5 . \n" +
+                ". 5 5 e 5 . . \n" +
+                "5 5 5 5 5 . . \n" +
+                "5 5 5 5 . . . \n" +
+                "5 5 5 . . . . \n" +
+                "5 e 5 . . . . \n" +
+                "5 5 5 . . . . \n" +
+                ". 5 5 5 . . . \n" +
+                ". 5 5 e 5 . . \n" +
+                ". . 5 5 5 . . ";
 
             CreatePlayer("monkey1.png", playerImageData, eyes: Color.Red, body: Color.Blue);
             CreatePlayer("monkey2.png", playerImageData, eyes: Color.Blue, body: Color.Brown);
             CreatePlayer("monkey3.png", playerImageData, eyes: Color.DarkBlue, body: Color.DarkKhaki);
+
+            CreateImage("shark.png", sharkImageData);
+            CreateImage("banana.png", bananaImageData);
         }
 
         private static void CreatePlayer(string imageName, string data, Color eyes, Color body)
         {
-            using var bitmap = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
             var lines = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var rows = lines.Length;
             var columns = lines[0].Length;
+            using var bitmap = new Bitmap(columns, rows, PixelFormat.Format32bppArgb);
             for (int y = 0; y < rows; y++)
             {
                 for (int x = 0; x < columns / 2; x++)
@@ -59,6 +90,27 @@ namespace ImageCreator
                     {
                         bitmap.SetPixel(x, y, DefineColor(c1));
                     }
+                }
+            }
+            bitmap.Save(imageName, ImageFormat.Png);
+        }
+
+        private static void CreateImage(string imageName, string data)
+        {
+            var lines = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var rows = lines.Length;
+            var columns = lines[0].Length;
+            using var bitmap = new Bitmap(columns, rows, PixelFormat.Format32bppArgb);
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns / 2; x++)
+                {
+                    var c1 = lines[y][x * 2];
+                    if (c1 == '.')
+                    {
+                        continue;
+                    }
+                    bitmap.SetPixel(x, y, DefineColor(c1));
                 }
             }
             bitmap.Save(imageName, ImageFormat.Png);

@@ -130,7 +130,9 @@ const loadImages = () => {
     const files = [
         "monkey1.png",
         "monkey2.png",
-        "monkey3.png"
+        "monkey3.png",
+        "shark.png",
+        "banana.png"
     ];
     _imagesToLoad = files.length;
 
