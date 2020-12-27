@@ -13,7 +13,7 @@ namespace CTB.Server.Hubs
     public class GameHub : Hub
     {
         private readonly IRepository _repository;
-        private static ConcurrentDictionary<string, Monkey> s_monkeys = new ConcurrentDictionary<string, Monkey>();
+        private static ConcurrentDictionary<string, Monkey> s_monkeys = new();
 
         public GameHub(IRepository repository)
         {
@@ -41,7 +41,7 @@ namespace CTB.Server.Hubs
 
         public async Task PlayerIDEvent(string playerID)
         {
-            var monkey = _repository.Get(playerID);
+            var monkey = _repository.GetByPlayerID(playerID);
 
             s_monkeys.AddOrUpdate(Context.ConnectionId, monkey, (key, previous) => { return monkey; });
             await Clients.Caller.SendAsync(HubConstants.PlayerRegisteredEventMethod, monkey);

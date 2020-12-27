@@ -2,6 +2,7 @@
 using CTB.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CTB.Server.Data
 {
@@ -11,7 +12,7 @@ namespace CTB.Server.Data
 
         private Random _random = new Random();
 
-        public Monkey Get(string playerID)
+        public Monkey GetByPlayerID(string playerID)
         {
             if (s_players.ContainsKey(playerID))
             {
@@ -32,6 +33,11 @@ namespace CTB.Server.Data
                 }
             };
             return s_players[playerID];
+        }
+
+        public List<Monkey> GetMonkeys()
+        {
+            return s_players.Values.ToList();
         }
     }
 }

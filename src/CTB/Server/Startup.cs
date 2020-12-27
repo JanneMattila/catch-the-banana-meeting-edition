@@ -1,13 +1,11 @@
 using CTB.Server.Data;
 using CTB.Server.Hubs;
+using CTB.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 
 namespace CTB.Server
 {
@@ -28,6 +26,7 @@ namespace CTB.Server
             services.AddSignalR();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<IHostedService, GameEngineBackgroundService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
