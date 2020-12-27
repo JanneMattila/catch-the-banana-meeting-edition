@@ -1,6 +1,7 @@
 ﻿using CTB.Server.Logic;
 using CTB.Shared.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,19 +9,46 @@ namespace CTB.Server.Data
 {
     public class Repository : IRepository
     {
-        private static Dictionary<string, Monkey> s_players = new Dictionary<string, Monkey>();
-
+        private ConcurrentDictionary<string, Monkey> _monkeys = new();
+        private ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
         private Random _random = new Random();
+
+        public Monkey GetByConnectionID(string connectionID)
+        {
+            if (_mapConnectionID2PlayerID.ContainsKey(connectionID))
+            {
+                var playerID = _mapConnectionID2PlayerID[connectionID];
+                return GetByPlayerID(playerID);
+            }
+            return null;
+        }
+
+        public Monkey DeleteByConnectionID(string connectionID)
+        {
+            if (_mapConnectionID2PlayerID.ContainsKey(connectionID))
+            {
+                var playerID = _mapConnectionID2PlayerID[connectionID];
+                _mapConnectionID2PlayerID.Remove(connectionID, out _);
+                return _monkeys[playerID];
+            }
+            return null;
+        }
+
+        public Monkey MapConnectionIDToPlayer(string connectionID, string playerID)
+        {
+            _mapConnectionID2PlayerID[connectionID] = playerID;
+            return GetByConnectionID(connectionID);
+        }
 
         public Monkey GetByPlayerID(string playerID)
         {
-            if (s_players.ContainsKey(playerID))
+            if (_monkeys.ContainsKey(playerID))
             {
-                return s_players[playerID];
+                return _monkeys[playerID];
             }
 
             var name = PlayerNameGenerator.CreateName();
-            s_players[playerID] = new Monkey()
+            _monkeys[playerID] = new Monkey()
             {
                 ID = playerID,
                 Name = name,
@@ -32,12 +60,12 @@ namespace CTB.Server.Data
                     Y = _random.Next(10, 150)
                 }
             };
-            return s_players[playerID];
+            return _monkeys[playerID];
         }
 
         public List<Monkey> GetMonkeys()
         {
-            return s_players.Values.ToList();
+            return _monkeys.Values.ToList();
         }
     }
 }

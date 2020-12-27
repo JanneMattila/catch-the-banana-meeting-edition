@@ -5,7 +5,10 @@ namespace CTB.Server.Data
 {
     public interface IRepository
     {
+        Monkey GetByConnectionID(string playerID);
         Monkey GetByPlayerID(string playerID);
         List<Monkey> GetMonkeys();
+        Monkey DeleteByConnectionID(string connectionID);
+        Monkey MapConnectionIDToPlayer(string connectionID, string playerID);
     }
 }
