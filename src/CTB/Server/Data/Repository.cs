@@ -11,6 +11,7 @@ namespace CTB.Server.Data
     {
         private ConcurrentDictionary<string, Monkey> _monkeys = new();
         private ConcurrentDictionary<string, Shark> _sharks = new();
+        private ConcurrentDictionary<string, Banana> _bananas = new();
         private ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
         private Random _random = new Random();
 
@@ -69,9 +70,34 @@ namespace CTB.Server.Data
             return _monkeys.Values.ToList();
         }
 
+        public void AddShark(Shark shark)
+        {
+            _sharks[shark.ID] = shark;
+        }
+
         public List<Shark> GetSharks()
         {
             return _sharks.Values.ToList();
+        }
+
+        public void DeleteShark(string id)
+        {
+            _sharks.Remove(id, out _);
+        }
+
+        public void AddBanana(Banana banana)
+        {
+            _bananas[banana.ID] = banana;
+        }
+
+        public List<Banana> GetBananas()
+        {
+            return _bananas.Values.ToList();
+        }
+
+        public void DeleteBanana(string id)
+        {
+            _bananas.Remove(id, out _);
         }
     }
 }

@@ -8,5 +8,7 @@ namespace CTB.Shared
         public Monkey Me { get; init; } = new();
 
         public List<Monkey> Monkeys { get; init; } = new();
+        public List<Banana> Bananas { get; init; } = new();
+        public List<Shark> Sharks { get; init; } = new();
     }
 }

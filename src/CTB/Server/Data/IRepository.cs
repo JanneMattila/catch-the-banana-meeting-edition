@@ -9,9 +9,16 @@ namespace CTB.Server.Data
         Monkey GetByPlayerID(string playerID);
         
         List<Monkey> GetMonkeys();
-        List<Shark> GetSharks();
 
         Monkey DeleteByConnectionID(string connectionID);
         Monkey MapConnectionIDToPlayer(string connectionID, string playerID);
+
+        void AddShark(Shark shark);
+        List<Shark> GetSharks();
+        void DeleteShark(string id);
+
+        void AddBanana(Banana banana);
+        List<Banana> GetBananas();
+        void DeleteBanana(string id);
     }
 }

@@ -89,6 +89,15 @@ namespace CTB.Shared
                 }
             }
 
+            foreach (var shark in _game.Sharks)
+            {
+                if (shark.Position.Speed > 0)
+                {
+                    shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
+                    shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
+                }
+            }
+
             _executeDraw(_game);
         }
 

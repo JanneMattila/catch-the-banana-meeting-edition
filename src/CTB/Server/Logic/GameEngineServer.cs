@@ -26,14 +26,7 @@ namespace CTB.Server.Logic
 
         public Position MoveMonkey(Monkey monkey, Position position)
         {
-            var x1 = monkey.Position.X;
-            var y1 = monkey.Position.Y;
-            var x2 = position.X;
-            var y2 = position.Y;
-
-            var dx = x2 - x1;
-            var dy = y2 - y1;
-            var distance = Math.Sqrt(dx * dx + dy * dy);
+            double distance = CalculateDistance(monkey.Position, position);
             if (distance > 10)
             {
                 _logger.LogWarning($"Distance between positions is {distance}. Old: {monkey.Position} -> New: {position}");
@@ -43,17 +36,67 @@ namespace CTB.Server.Logic
             return position;
         }
 
+        private static double CalculateDistance(Position left, Position right)
+        {
+            var x1 = left.X;
+            var y1 = left.Y;
+            var x2 = right.X;
+            var y2 = right.Y;
+
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            var distance = Math.Sqrt(dx * dx + dy * dy);
+            return distance;
+        }
+
         public bool Update(double delta)
         {
             var monkeys = _repository.GetMonkeys();
+            var sharks = _repository.GetSharks();
+            var bananas = _repository.GetBananas();
+            var eatenBananas = new HashSet<string>();
+
             foreach (var monkey in monkeys)
             {
                 if (monkey.Position.Speed > 0)
                 {
                     monkey.Position.X += (int)Math.Round(delta * Math.Cos(monkey.Position.Rotation));
                     monkey.Position.Y += (int)Math.Round(delta * Math.Sin(monkey.Position.Rotation));
+
+                    foreach (var banana in bananas)
+                    {
+                        var distance = CalculateDistance(banana.Position, monkey.Position);
+                        if (distance < 10)
+                        {
+                            monkey.Score++;
+                            eatenBananas.Add(banana.ID);
+                        }
+                    }
                 }
             }
+
+            foreach (var eatenBanana in eatenBananas)
+            {
+                _repository.DeleteBanana(eatenBanana);
+            }
+
+            foreach (var shark in sharks)
+            {
+                if (shark.Position.Speed > 0)
+                {
+                    shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
+                    shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
+
+                    foreach (var monkey in monkeys)
+                    {
+                        var distance = CalculateDistance(shark.Position, monkey.Position);
+                        if (distance < 10)
+                        {
+                        }
+                    }
+                }
+            }
+
             return monkeys.Any();
         }
     }
