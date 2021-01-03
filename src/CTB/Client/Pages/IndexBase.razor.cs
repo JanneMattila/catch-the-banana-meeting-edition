@@ -21,11 +21,10 @@ namespace CTB.Client.Pages
         [Inject] 
         private IJSRuntime JSRuntime { get; set; }
 
-        public string WelcomeVisibility { get => _welcomeVisibility; set => _welcomeVisibility = value; }
+        public string WelcomeVisibility { get; set; } = ElementVisibility.None;
 
         protected ElementReference _canvas;
         protected GameEngine _gameEngine = new();
-        private string _welcomeVisibility = ElementVisibility.None;
 
         private DotNetObjectReference<IndexBase> _selfRef;
         private HubConnection _hubConnection;
@@ -37,6 +36,7 @@ namespace CTB.Client.Pages
             {
                 if (_hubConnection.State == HubConnectionState.Connected)
                 {
+                    Console.WriteLine($"Sending position {position}");
                     await _hubConnection.InvokeAsync(HubConstants.MoveEventMethod, position);
                 }
             });
