@@ -180,7 +180,8 @@ CTB.requestAnimationFrame = (timestamp: number) => {
     const delta = timestamp - _timestamp;
     _timestamp = timestamp;
     if (_dotnetRef !== undefined) {
-        _dotnetRef.invokeMethod("GameUpdate", delta);
+        const SPEED_CONSTANT = 10;
+        _dotnetRef.invokeMethod("GameUpdate", delta / SPEED_CONSTANT);
     }
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 }

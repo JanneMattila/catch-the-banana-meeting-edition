@@ -61,6 +61,7 @@ namespace CTB.Shared
             if (changed)
             {
                 _executePlayerUpdated(_game.Me.Position);
+                _positionUpdated = 0;
             }
         }
 
@@ -68,14 +69,12 @@ namespace CTB.Shared
         {
             if (_game.Me.Position.Speed > 0)
             {
-                _game.Me.Position.X += (int)Math.Round(delta / 10 * Math.Cos(_game.Me.Position.Rotation));
-                _game.Me.Position.Y += (int)Math.Round(delta / 10 * Math.Sin(_game.Me.Position.Rotation));
-
-                //Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
+                _game.Me.Position.X += (int)Math.Round(delta * Math.Cos(_game.Me.Position.Rotation));
+                _game.Me.Position.Y += (int)Math.Round(delta * Math.Sin(_game.Me.Position.Rotation));
             }
 
             _positionUpdated += delta;
-            if (_positionUpdated > 100)
+            if (_positionUpdated > 250)
             {
                 _executePlayerUpdated(_game.Me.Position);
                 _positionUpdated = 0;
@@ -85,8 +84,8 @@ namespace CTB.Shared
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += (int)Math.Round(delta / 10 * Math.Cos(monkey.Position.Rotation));
-                    monkey.Position.Y += (int)Math.Round(delta / 10 * Math.Sin(monkey.Position.Rotation));
+                    monkey.Position.X += (int)Math.Round(delta * Math.Cos(monkey.Position.Rotation));
+                    monkey.Position.Y += (int)Math.Round(delta * Math.Sin(monkey.Position.Rotation));
                 }
             }
 

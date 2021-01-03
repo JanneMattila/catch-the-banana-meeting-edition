@@ -50,8 +50,8 @@ namespace CTB.Server.Logic
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += (int)Math.Round(delta * 1_000 * Math.Cos(monkey.Position.Rotation));
-                    monkey.Position.Y += (int)Math.Round(delta * 1_000 * Math.Sin(monkey.Position.Rotation));
+                    monkey.Position.X += (int)Math.Round(delta * Math.Cos(monkey.Position.Rotation));
+                    monkey.Position.Y += (int)Math.Round(delta * Math.Sin(monkey.Position.Rotation));
                 }
             }
             return monkeys.Any();

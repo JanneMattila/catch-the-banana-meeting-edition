@@ -21,13 +21,15 @@ namespace CTB.Server.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            const double SPEED_CONSTANT = 100d;
+
             var stopWatch = Stopwatch.StartNew();
             var update = stopWatch.Elapsed.Ticks;
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 var timestamp = stopWatch.Elapsed.Ticks;
-                var delta = (timestamp - update) / (double)TimeSpan.TicksPerSecond;
+                var delta = SPEED_CONSTANT * (timestamp - update) / TimeSpan.TicksPerSecond;
 
                 _logger.LogTrace(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
 
