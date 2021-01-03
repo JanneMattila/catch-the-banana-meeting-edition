@@ -13,6 +13,7 @@ namespace CTB.Shared
         private Action<Game> _executeDraw;
         private Action<Position> _executePlayerUpdated;
         private HashSet<int> _keys = new();
+        private double _positionUpdated = 0;
 
         public Game Game { get => _game; }
 
@@ -71,6 +72,13 @@ namespace CTB.Shared
                 _game.Me.Position.Y += (int)Math.Round(delta / 10 * Math.Sin(_game.Me.Position.Rotation));
 
                 //Console.WriteLine($"{_game.Me.Position.X}, {_game.Me.Position.Y}");
+            }
+
+            _positionUpdated += delta;
+            if (_positionUpdated > 100)
+            {
+                _executePlayerUpdated(_game.Me.Position);
+                _positionUpdated = 0;
             }
 
             foreach (var monkey in _game.Monkeys)
