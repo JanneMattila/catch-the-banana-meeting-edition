@@ -29,7 +29,7 @@ namespace CTB.Server.Services
                 var timestamp = stopWatch.Elapsed.Ticks;
                 var delta = (timestamp - update) / (double)TimeSpan.TicksPerSecond;
 
-                _logger.LogDebug(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
+                _logger.LogTrace(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
 
                 var updates = _gameEngine.Update(delta);
                 update = timestamp;
@@ -37,12 +37,13 @@ namespace CTB.Server.Services
                 if (updates)
                 {
                     // Run game engine all the time.
-                    await Task.CompletedTask;
+                    // In reality this delay is ~20ms which is for game like this
+                    await Task.Delay(1, stoppingToken);
                 }
                 else
                 {
                     // Wait for players to join
-                    await Task.Delay(100, stoppingToken);
+                    await Task.Delay(1000, stoppingToken);
                 }
             }
         }

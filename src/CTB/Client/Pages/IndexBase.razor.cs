@@ -5,10 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CTB.Client.Pages
@@ -36,7 +33,13 @@ namespace CTB.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             _gameEngine.SetExecuteDraw(async (game) => await JSRuntime.InvokeAsync<string>("CTB.draw", game));
-            _gameEngine.SetExecutePlayerUpdated(async (position) => await _hubConnection.InvokeAsync(HubConstants.MoveEventMethod, position));
+            _gameEngine.SetExecutePlayerUpdated(async (position) =>
+            {
+                if (_hubConnection.State == HubConnectionState.Connected)
+                {
+                    await _hubConnection.InvokeAsync(HubConstants.MoveEventMethod, position);
+                }
+            });
 
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
