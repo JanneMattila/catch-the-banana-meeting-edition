@@ -1,7 +1,10 @@
-﻿namespace CTB.Server.Logic
+﻿using CTB.Shared.Interfaces;
+
+namespace CTB.Server.Logic
 {
     public interface IGameEngineServer
     {
-        int Update(double delta);
+        bool Update(double delta);
+        Position MoveMonkey(Monkey monkey, Position position);
     }
 }

@@ -7,16 +7,21 @@ using CTB.Server.Logic;
 using CTB.Shared;
 using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace CTB.Server.Hubs
 {
     public class GameHub : Hub
     {
+        private readonly IGameEngineServer _gameEngineServer;
         private readonly IRepository _repository;
+        private readonly ILogger<GameHub> _logger;
 
-        public GameHub(IRepository repository)
+        public GameHub(IGameEngineServer gameEngineServer, IRepository repository, ILogger<GameHub> logger)
         {
+            _gameEngineServer = gameEngineServer;
             _repository = repository;
+            _logger = logger;
         }
 
         public override async Task OnConnectedAsync()
@@ -48,7 +53,7 @@ namespace CTB.Server.Hubs
         public async Task MoveEvent(Position position)
         {
             var monkey = _repository.GetByConnectionID(Context.ConnectionId);
-            monkey.Position = position;
+            monkey.Position = _gameEngineServer.MoveMonkey(monkey, position);
             await Clients.Others.SendAsync(HubConstants.MoveEventMethod, monkey);
         }
     }

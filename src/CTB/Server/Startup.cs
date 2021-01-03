@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace CTB.Server
 {
@@ -32,8 +33,10 @@ namespace CTB.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Configuring");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,6 +62,8 @@ namespace CTB.Server
                 endpoints.MapFallbackToFile("index.html");
                 endpoints.MapHub<GameHub>("/GameHub");
             });
+
+            logger.LogInformation("Configure completed.");
         }
     }
 }

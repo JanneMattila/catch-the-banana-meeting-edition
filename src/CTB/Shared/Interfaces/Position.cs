@@ -15,5 +15,10 @@ namespace CTB.Shared.Interfaces
 
         [JsonPropertyName("speed")]
         public int Speed { get; set; }
+
+        public override string ToString()
+        {
+            return $"X: {X}, Y: {Y}, R: {Rotation}, S: {Speed}";
+        }
     }
 }

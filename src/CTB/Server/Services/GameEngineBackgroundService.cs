@@ -34,15 +34,15 @@ namespace CTB.Server.Services
                 var updates = _gameEngine.Update(delta);
                 update = timestamp;
 
-                if (updates == 0)
-                {
-                    // Wait for players to join
-                    await Task.Delay(100, stoppingToken);
-                }
-                else
+                if (updates)
                 {
                     // Run game engine all the time.
                     await Task.CompletedTask;
+                }
+                else
+                {
+                    // Wait for players to join
+                    await Task.Delay(100, stoppingToken);
                 }
             }
         }
