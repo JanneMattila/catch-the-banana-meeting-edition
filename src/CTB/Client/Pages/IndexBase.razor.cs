@@ -131,6 +131,14 @@ namespace CTB.Client.Pages
             WelcomeVisibility = ElementVisibility.None;
         }
 
+
+        [JSInvokable]
+        public async void ClearInput()
+        {
+            _gameEngine.OnClearInput();
+            await Task.CompletedTask;
+        }
+
         [JSInvokable]
         public async void CanvasKeyDown(int keyCode)
         {

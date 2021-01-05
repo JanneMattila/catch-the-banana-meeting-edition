@@ -40,6 +40,12 @@ namespace CTB.Shared
             _game.Me.Position = monkey.Position;
         }
 
+        public void OnClearInput()
+        {
+            _keys.Clear();
+            KeyboardStateChanged();
+        }
+
         public void OnKeyDown(int keyCode)
         {
             _keys.Add(keyCode);
@@ -154,7 +160,6 @@ namespace CTB.Shared
             _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
             _game.Monkeys.Add(monkey);
         }
-
 
         public void OtherPlayerConnected(Monkey monkey)
         {

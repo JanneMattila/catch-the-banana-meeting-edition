@@ -95,6 +95,8 @@ namespace CTB.Server.Logic
                     }
                 };
                 _repository.AddBanana(banana);
+
+                _logger.LogInformation(LoggingEvents.GameEngineAddBanana, $"Add Banana ID: {banana.ID}, {banana.Position}");
                 await _gameHub.Clients.All.SendAsync(HubConstants.MoveBananaEventMethod, banana);
             }
 
@@ -141,6 +143,8 @@ namespace CTB.Server.Logic
                     }
                 };
                 _repository.AddShark(shark);
+
+                _logger.LogInformation(LoggingEvents.GameEngineAddShark, $"Add Shark ID: {shark.ID}, {shark.Position}");
                 await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
             }
 

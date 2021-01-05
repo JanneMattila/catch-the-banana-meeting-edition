@@ -33,6 +33,12 @@ window.addEventListener('resize', () => {
     resizeCanvas();
 });
 
+window.addEventListener('blur', () => {
+    if (_dotnetRef !== undefined) {
+        _dotnetRef.invokeMethod("ClearInput");
+    }
+});
+
 document.addEventListener('keydown', (event: KeyboardEvent) => {
     if (_dotnetRef !== undefined && !event.altKey && !event.ctrlKey) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
