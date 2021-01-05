@@ -166,6 +166,29 @@ namespace CTB.Shared
             _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
         }
 
+        public void BananaUpdate(Banana banana)
+        {
+            _game.Bananas.RemoveAll(m => m.ID == banana.ID);
+            _game.Bananas.Add(banana);
+        }
+
+        public void BananaDelete(Banana banana)
+        {
+            _game.Bananas.RemoveAll(m => m.ID == banana.ID);
+        }
+
+
+        public void SharkUpdate(Shark shark)
+        {
+            _game.Sharks.RemoveAll(m => m.ID == shark.ID);
+            _game.Sharks.Add(shark);
+        }
+
+        public void SharkDelete(Shark shark)
+        {
+            _game.Sharks.RemoveAll(m => m.ID == shark.ID);
+        }
+
         private double FixAngle(double angle)
         {
             if (angle < 0)

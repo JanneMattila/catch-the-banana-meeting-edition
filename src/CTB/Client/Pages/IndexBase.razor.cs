@@ -37,7 +37,7 @@ namespace CTB.Client.Pages
                 if (_hubConnection.State == HubConnectionState.Connected)
                 {
                     Console.WriteLine($"Sending position {position}");
-                    await _hubConnection.InvokeAsync(HubConstants.MoveEventMethod, position);
+                    await _hubConnection.InvokeAsync(HubConstants.MoveMonkeyEventMethod, position);
                 }
             });
 
@@ -51,15 +51,15 @@ namespace CTB.Client.Pages
                 StateHasChanged();
             });
 
-            _hubConnection.On(HubConstants.MoveEventMethod, (Monkey monkey) =>
+            _hubConnection.On(HubConstants.MoveMonkeyEventMethod, (Monkey monkey) =>
             {
-                MoveEventReceived(monkey);
+                _gameEngine.OtherPlayerUpdate(monkey);
                 StateHasChanged();
             });
 
             _hubConnection.On(HubConstants.MonkeyConnectedEventMethod, (Monkey monkey) =>
             {
-                MonkeyConnected(monkey);
+                _gameEngine.OtherPlayerConnected(monkey);
                 StateHasChanged();
             });
 
@@ -69,13 +69,31 @@ namespace CTB.Client.Pages
                 StateHasChanged();
             });
 
+            _hubConnection.On(HubConstants.MoveBananaEventMethod, (Banana banana) =>
+            {
+                _gameEngine.BananaUpdate(banana);
+                StateHasChanged();
+            });
+            _hubConnection.On(HubConstants.DeleteBananaEventMethod, (Banana banana) =>
+            {
+                _gameEngine.BananaDelete(banana);
+                StateHasChanged();
+            });
+
+            _hubConnection.On(HubConstants.MoveSharkEventMethod, (Shark shark) =>
+            {
+                _gameEngine.SharkUpdate(shark);
+                StateHasChanged();
+            });
+            _hubConnection.On(HubConstants.DeleteSharkEventMethod, (Shark shark) =>
+            {
+                _gameEngine.SharkDelete(shark);
+                StateHasChanged();
+            });
+
             await _hubConnection.StartAsync();
 
             await base.OnInitializedAsync();
-        }
-        private void MonkeyConnected(Monkey monkey)
-        {
-            _gameEngine.OtherPlayerConnected(monkey);
         }
 
         private void MonkeyDisconnected(Monkey monkey)
@@ -101,11 +119,6 @@ namespace CTB.Client.Pages
             _gameEngine.SetPlayer(monkey);
 
             WelcomeVisibility = ElementVisibility.Inline;
-        }
-
-        private void MoveEventReceived(Monkey monkey)
-        {
-            _gameEngine.OtherPlayerUpdate(monkey);
         }
 
         protected async Task CanvasOnClick(MouseEventArgs eventArgs)

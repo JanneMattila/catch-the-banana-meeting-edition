@@ -9,11 +9,11 @@ namespace CTB.Server.Data
 {
     public class Repository : IRepository
     {
-        private ConcurrentDictionary<string, Monkey> _monkeys = new();
-        private ConcurrentDictionary<string, Shark> _sharks = new();
-        private ConcurrentDictionary<string, Banana> _bananas = new();
-        private ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
-        private Random _random = new Random();
+        private readonly ConcurrentDictionary<string, Monkey> _monkeys = new();
+        private readonly ConcurrentDictionary<string, Shark> _sharks = new();
+        private readonly ConcurrentDictionary<string, Banana> _bananas = new();
+        private readonly ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
+        private readonly Random _random = new();
 
         public Monkey GetByConnectionID(string connectionID)
         {

@@ -33,7 +33,7 @@ namespace CTB.Server.Services
 
                 _logger.LogTrace(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
 
-                var updates = _gameEngine.Update(delta);
+                var updates = await _gameEngine.UpdateAsync(delta);
                 update = timestamp;
 
                 if (updates)

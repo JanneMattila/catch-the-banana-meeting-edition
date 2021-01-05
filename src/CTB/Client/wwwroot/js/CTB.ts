@@ -18,6 +18,8 @@ let _rightTouchCurrent: CanvasTouch = undefined;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images: Array<HTMLImageElement> = [];
+const SHARK_INDEX = 3;
+const BANANA_INDEX = 4;
 
 const resizeCanvas = () => {
     if (_canvasElement !== undefined) {
@@ -219,12 +221,22 @@ CTB.draw = (game) => {
     if (game !== undefined) {
         if (_imagesLoaded === _imagesToLoad) {
 
+            for (let i = 0; i < game.bananas.length; i++) {
+                const banana = game.bananas[i];
+                _context.drawImage(_images[BANANA_INDEX], banana.position.x, banana.position.y);
+            }
+
             for (let i = 0; i < game.monkeys.length; i++) {
                 const monkey = game.monkeys[i];
                 _context.drawImage(_images[monkey.ui], monkey.position.x, monkey.position.y);
             }
 
             _context.drawImage(_images[game.me.ui], game.me.position.x, game.me.position.y);
+
+            for (let i = 0; i < game.sharks.length; i++) {
+                const shark = game.sharks[i];
+                _context.drawImage(_images[SHARK_INDEX], shark.position.x, shark.position.y);
+            }
         }
     }
     

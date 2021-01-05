@@ -1,5 +1,6 @@
 ﻿using CTB.Server.Data;
 using CTB.Server.Hubs;
+using CTB.Shared;
 using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace CTB.Server.Logic
         private readonly ILogger<GameEngineServer> _logger;
         private readonly IRepository _repository;
         private readonly IHubContext<GameHub> _gameHub;
+        private readonly Random _random = new();
 
         public GameEngineServer(IRepository repository, IHubContext<GameHub> gameHub, ILogger<GameEngineServer> logger)
         {
@@ -49,7 +51,7 @@ namespace CTB.Server.Logic
             return distance;
         }
 
-        public bool Update(double delta)
+        public async Task<bool> UpdateAsync(double delta)
         {
             var monkeys = _repository.GetMonkeys();
             var sharks = _repository.GetSharks();
@@ -78,6 +80,22 @@ namespace CTB.Server.Logic
             foreach (var eatenBanana in eatenBananas)
             {
                 _repository.DeleteBanana(eatenBanana);
+                await _gameHub.Clients.All.SendAsync(HubConstants.DeleteBananaEventMethod, eatenBanana);
+            }
+
+            if (!bananas.Any())
+            {
+                var banana = new Banana()
+                {
+                    ID = Guid.NewGuid().ToString("B"),
+                    Position = new Position()
+                    {
+                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
+                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2)
+                    }
+                };
+                _repository.AddBanana(banana);
+                await _gameHub.Clients.All.SendAsync(HubConstants.MoveBananaEventMethod, banana);
             }
 
             foreach (var shark in sharks)
@@ -87,17 +105,53 @@ namespace CTB.Server.Logic
                     shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
                     shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
 
+                    Monkey closestMonkey = null;
+                    var closestDistance = double.MaxValue;
                     foreach (var monkey in monkeys)
                     {
                         var distance = CalculateDistance(shark.Position, monkey.Position);
+                        if (distance < closestDistance)
+                        {
+                            closestMonkey = monkey;
+                            closestDistance = distance;
+                        }
+
                         if (distance < 10)
                         {
+                            // TODO: Monkey has been eaten by the shark!
                         }
+                    }
+
+                    if (closestMonkey != null)
+                    {
+                        shark.Position.Rotation = CalculateAngle(shark.Position, closestMonkey.Position);
                     }
                 }
             }
 
+            if (!sharks.Any())
+            {
+                var shark = new Shark()
+                {
+                    ID = Guid.NewGuid().ToString("B"),
+                    Position = new Position()
+                    {
+                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
+                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2)
+                    }
+                };
+                _repository.AddShark(shark);
+                await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
+            }
+
             return monkeys.Any();
+        }
+
+        private double CalculateAngle(Position from, Position to)
+        {
+            var dx = to.X - from.X;
+            var dy = from.Y - to.Y;
+            return Math.Atan2(dy, dx);
         }
     }
 }

@@ -50,11 +50,11 @@ namespace CTB.Server.Hubs
             await Clients.Others.SendAsync(HubConstants.MonkeyConnectedEventMethod, monkey);
         }
 
-        public async Task MoveEvent(Position position)
+        public async Task MoveMonkeyEvent(Position position)
         {
             var monkey = _repository.GetByConnectionID(Context.ConnectionId);
             monkey.Position = _gameEngineServer.MoveMonkey(monkey, position);
-            await Clients.Others.SendAsync(HubConstants.MoveEventMethod, monkey);
+            await Clients.Others.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
         }
     }
 }
