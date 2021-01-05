@@ -190,17 +190,16 @@ const getPlayerId = () => {
 }
 
 const drawImage = (img: HTMLImageElement, position: any) => {
-    //if (position.rotation >= Math.PI * 3 / 2 || position.rotation <= Math.PI / 2) {
-    //    _context.save();
-    //    _context.translate(position.x, position.y - img.height / 2);
-    //    _context.scale(-1, 1);
-    //    _context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-    //    _context.restore();
-    //}
-    //else {
-        _context.drawImage(img, position.x, position.y);
-    //_context.drawImage(img, position.x - img.width / 2, position.y - img.height / 2);
-    //}
+    if (position.rotation >= Math.PI * 3 / 2 || position.rotation <= Math.PI / 2) {
+        _context.save();
+        _context.translate(position.x + img.width / 2, position.y - img.height / 2);
+        _context.scale(-1, 1);
+        _context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+        _context.restore();
+    }
+    else {
+    _context.drawImage(img, position.x - img.width / 2, position.y - img.height / 2);
+    }
 }
 
 CTB.requestAnimationFrame = (timestamp: number) => {

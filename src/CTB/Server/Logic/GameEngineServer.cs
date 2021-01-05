@@ -68,10 +68,14 @@ namespace CTB.Server.Logic
                     foreach (var banana in bananas)
                     {
                         var distance = CalculateDistance(banana.Position, monkey.Position);
-                        if (distance <= WorldConstants.Banana.Height / 2)
+                        if (distance <= WorldConstants.Banana.Height)
                         {
-                            monkey.Score++;
-                            eatenBananas.Add(banana.ID);
+                            var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, banana.Position, WorldConstants.Banana);
+                            if (collision)
+                            {
+                                monkey.Score++;
+                                eatenBananas.Add(banana.ID);
+                            }
                         }
                     }
                 }
