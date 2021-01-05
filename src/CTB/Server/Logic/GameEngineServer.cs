@@ -102,31 +102,36 @@ namespace CTB.Server.Logic
 
             foreach (var shark in sharks)
             {
-                if (shark.Position.Speed > 0)
+                Monkey closestMonkey = null;
+                var closestDistance = double.MaxValue;
+                foreach (var monkey in monkeys)
                 {
+                    var distance = CalculateDistance(shark.Position, monkey.Position);
+                    if (distance < closestDistance)
+                    {
+                        closestMonkey = monkey;
+                        closestDistance = distance;
+                    }
+
+                    if (distance < 10)
+                    {
+                        // TODO: Monkey has been eaten by the shark!
+                    }
+                }
+
+                if (closestMonkey != null)
+                {
+                    shark.Position.Rotation = CalculateAngle(shark.Position, closestMonkey.Position);
+                        
+                    _logger.LogInformation($"Closed monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
+
                     shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
                     shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
 
-                    Monkey closestMonkey = null;
-                    var closestDistance = double.MaxValue;
-                    foreach (var monkey in monkeys)
+                    if (closestMonkey.ID != shark.Follows)
                     {
-                        var distance = CalculateDistance(shark.Position, monkey.Position);
-                        if (distance < closestDistance)
-                        {
-                            closestMonkey = monkey;
-                            closestDistance = distance;
-                        }
-
-                        if (distance < 10)
-                        {
-                            // TODO: Monkey has been eaten by the shark!
-                        }
-                    }
-
-                    if (closestMonkey != null)
-                    {
-                        shark.Position.Rotation = CalculateAngle(shark.Position, closestMonkey.Position);
+                        shark.Follows = closestMonkey.ID;
+                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
                     }
                 }
             }
@@ -154,9 +159,10 @@ namespace CTB.Server.Logic
 
         private double CalculateAngle(Position from, Position to)
         {
-            var dx = to.X - from.X;
-            var dy = from.Y - to.Y;
-            return Math.Atan2(dy, dx);
+            var dx = from.X - to.X;
+            var dy = to.Y - from.Y;
+            var angle = Math.Atan2(dy, dx);
+            return Math.PI - angle;
         }
     }
 }

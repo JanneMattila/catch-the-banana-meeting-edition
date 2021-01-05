@@ -9,5 +9,8 @@ namespace CTB.Shared.Interfaces
 
         [JsonPropertyName("position")]
         public Position Position { get; set; } = new();
+
+        [JsonPropertyName("follows")]
+        public string Follows { get; set; }
     }
 }

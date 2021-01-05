@@ -209,6 +209,14 @@ namespace CTB.Shared
             return angle;
         }
 
+        private double CalculateAngle(Position from, Position to)
+        {
+            var dx = from.X - to.X;
+            var dy = to.Y - from.Y;
+            var angle = Math.Atan2(dy, dx);
+            return Math.PI - angle;
+        }
+
         public void OnCanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
         {
             var previousRotation = _game.Me.Position.Rotation;
