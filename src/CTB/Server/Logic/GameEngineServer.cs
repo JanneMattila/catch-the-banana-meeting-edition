@@ -113,10 +113,10 @@ namespace CTB.Server.Logic
                         closestDistance = distance;
                     }
 
-                    if (distance <= WorldConstants.Shark.Width)
+                    if (distance < WorldConstants.Shark.Width)
                     {
-                        var overlap = CheckCollision(monkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
-                        if (overlap)
+                        var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
+                        if (collision)
                         {
                             // Monkey has been eaten by the shark!
                             monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
@@ -179,7 +179,7 @@ namespace CTB.Server.Logic
             };
 
             if (p1.X > p2.X + size2.Width || p1.Y > p2.Y + size2.Height ||
-                p1.X + size1.Width < p2.X || p1.Y + size1.Height < p2.Y)
+                p2.X > p1.X + size1.Width || p2.Y > p1.Y + size1.Height)
             {
                 return false;
             }

@@ -99,11 +99,11 @@ namespace ImageCreator
         {
             var lines = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var rows = lines.Length;
-            var columns = lines[0].Length;
+            var columns = lines[0].Length / 2;
             using var bitmap = new Bitmap(columns, rows, PixelFormat.Format32bppArgb);
             for (int y = 0; y < rows; y++)
             {
-                for (int x = 0; x < columns / 2; x++)
+                for (int x = 0; x < columns; x++)
                 {
                     var c1 = lines[y][x * 2];
                     if (c1 == '.')
