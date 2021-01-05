@@ -126,7 +126,7 @@ namespace CTB.Shared
 
         private (double, bool, bool) HandleKeyboard()
         {
-            var rotation = 0d;
+            var rotation = _game.Me.Position.Rotation;
             var movePlayer = false;
 
             var previousMovePlayer = _game.Me.Position.Speed > 0;
@@ -164,6 +164,7 @@ namespace CTB.Shared
             }
             else if (_keys.Contains(Keys.Right) || _keys.Contains(Keys.KeyD))
             {
+                rotation = 0;
                 movePlayer = true;
             }
             var changed =

@@ -168,6 +168,18 @@ const getPlayerId = () => {
     }
     return id;
 };
+const drawImage = (img, position) => {
+    if (position.rotation >= Math.PI * 3 / 2 || position.rotation <= Math.PI / 2) {
+        _context.save();
+        _context.translate(position.x + img.width / 2, position.y);
+        _context.scale(-1, 1);
+        _context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+        _context.restore();
+    }
+    else {
+        _context.drawImage(img, position.x, position.y);
+    }
+};
 CTB.requestAnimationFrame = (timestamp) => {
     const delta = timestamp - _timestamp;
     _timestamp = timestamp;
@@ -204,16 +216,16 @@ CTB.draw = (game) => {
         if (_imagesLoaded === _imagesToLoad) {
             for (let i = 0; i < game.bananas.length; i++) {
                 const banana = game.bananas[i];
-                _context.drawImage(_images[BANANA_INDEX], banana.position.x, banana.position.y);
+                drawImage(_images[BANANA_INDEX], banana.position);
             }
             for (let i = 0; i < game.monkeys.length; i++) {
                 const monkey = game.monkeys[i];
-                _context.drawImage(_images[monkey.ui], monkey.position.x, monkey.position.y);
+                drawImage(_images[monkey.ui], monkey.position);
             }
-            _context.drawImage(_images[game.me.ui], game.me.position.x, game.me.position.y);
+            drawImage(_images[game.me.ui], game.me.position);
             for (let i = 0; i < game.sharks.length; i++) {
                 const shark = game.sharks[i];
-                _context.drawImage(_images[SHARK_INDEX], shark.position.x, shark.position.y);
+                drawImage(_images[SHARK_INDEX], shark.position);
             }
         }
     }
