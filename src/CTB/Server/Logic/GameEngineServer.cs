@@ -68,7 +68,7 @@ namespace CTB.Server.Logic
                     foreach (var banana in bananas)
                     {
                         var distance = CalculateDistance(banana.Position, monkey.Position);
-                        if (distance < 10)
+                        if (distance <= WorldConstants.Banana.Height / 2)
                         {
                             monkey.Score++;
                             eatenBananas.Add(banana.ID);
@@ -113,13 +113,17 @@ namespace CTB.Server.Logic
                         closestDistance = distance;
                     }
 
-                    if (distance < 10)
+                    if (distance <= WorldConstants.Shark.Width)
                     {
-                        // Monkey has been eaten by the shark!
-                        monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
-                        monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
+                        var overlap = CheckCollision(monkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
+                        if (overlap)
+                        {
+                            // Monkey has been eaten by the shark!
+                            monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
+                            monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
 
-                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
+                            await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
+                        }
                     }
                 }
 
@@ -159,6 +163,27 @@ namespace CTB.Server.Logic
             }
 
             return monkeys.Any();
+        }
+
+        private bool CheckCollision(Position position1, Size size1, Position position2, Size size2)
+        {
+            var p1 = new Position()
+            {
+                X = position1.X - size1.Width / 2,
+                Y = position1.Y - size1.Height / 2
+            };
+            var p2 = new Position()
+            {
+                X = position2.X - size2.Width / 2,
+                Y = position2.Y - size2.Height / 2
+            };
+
+            if (p1.X > p2.X + size2.Width || p1.Y > p2.Y + size2.Height ||
+                p1.X + size1.Width < p2.X || p1.Y + size1.Height < p2.Y)
+            {
+                return false;
+            }
+            return true;
         }
 
         private double CalculateAngle(Position from, Position to)
