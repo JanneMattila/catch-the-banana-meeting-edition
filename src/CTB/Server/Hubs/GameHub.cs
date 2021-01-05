@@ -31,6 +31,16 @@ namespace CTB.Server.Hubs
                 await Clients.Caller.SendAsync(HubConstants.MonkeyConnectedEventMethod, monkey);
             }
 
+            foreach (var shark in _repository.GetSharks())
+            {
+                await Clients.Caller.SendAsync(HubConstants.MoveSharkEventMethod, shark);
+            }
+
+            foreach (var banana in _repository.GetBananas())
+            {
+                await Clients.Caller.SendAsync(HubConstants.MoveBananaEventMethod, banana);
+            }
+
             await base.OnConnectedAsync();
         }
 

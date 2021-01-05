@@ -173,25 +173,27 @@ namespace CTB.Shared
 
         public void BananaUpdate(Banana banana)
         {
+            Console.WriteLine($"Update Banana ID: {banana.ID}, {banana.Position}");
+
             _game.Bananas.RemoveAll(m => m.ID == banana.ID);
             _game.Bananas.Add(banana);
         }
 
-        public void BananaDelete(Banana banana)
+        public void BananaDelete(string id)
         {
-            _game.Bananas.RemoveAll(m => m.ID == banana.ID);
+            _game.Bananas.RemoveAll(m => m.ID == id);
         }
-
 
         public void SharkUpdate(Shark shark)
         {
+            Console.WriteLine($"Update Shark ID: {shark.ID}, {shark.Position}");
             _game.Sharks.RemoveAll(m => m.ID == shark.ID);
             _game.Sharks.Add(shark);
         }
 
-        public void SharkDelete(Shark shark)
+        public void SharkDelete(string id)
         {
-            _game.Sharks.RemoveAll(m => m.ID == shark.ID);
+            _game.Sharks.RemoveAll(m => m.ID == id);
         }
 
         private double FixAngle(double angle)

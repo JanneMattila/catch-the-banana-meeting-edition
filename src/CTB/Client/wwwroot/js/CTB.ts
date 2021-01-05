@@ -33,7 +33,12 @@ window.addEventListener('resize', () => {
     resizeCanvas();
 });
 
+window.addEventListener('focus', () => {
+    console.log("window focus");
+});
+
 window.addEventListener('blur', () => {
+    console.log("window blur");
     if (_dotnetRef !== undefined) {
         _dotnetRef.invokeMethod("ClearInput");
     }

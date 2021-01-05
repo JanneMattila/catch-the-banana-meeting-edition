@@ -139,7 +139,8 @@ namespace CTB.Server.Logic
                     Position = new Position()
                     {
                         X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
-                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2)
+                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2),
+                        Speed = 1
                     }
                 };
                 _repository.AddShark(shark);

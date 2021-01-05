@@ -74,9 +74,9 @@ namespace CTB.Client.Pages
                 _gameEngine.BananaUpdate(banana);
                 StateHasChanged();
             });
-            _hubConnection.On(HubConstants.DeleteBananaEventMethod, (Banana banana) =>
+            _hubConnection.On(HubConstants.DeleteBananaEventMethod, (string id) =>
             {
-                _gameEngine.BananaDelete(banana);
+                _gameEngine.BananaDelete(id);
                 StateHasChanged();
             });
 
@@ -85,9 +85,9 @@ namespace CTB.Client.Pages
                 _gameEngine.SharkUpdate(shark);
                 StateHasChanged();
             });
-            _hubConnection.On(HubConstants.DeleteSharkEventMethod, (Shark shark) =>
+            _hubConnection.On(HubConstants.DeleteSharkEventMethod, (string id) =>
             {
-                _gameEngine.SharkDelete(shark);
+                _gameEngine.SharkDelete(id);
                 StateHasChanged();
             });
 
@@ -130,7 +130,6 @@ namespace CTB.Client.Pages
         {
             WelcomeVisibility = ElementVisibility.None;
         }
-
 
         [JSInvokable]
         public async void ClearInput()
