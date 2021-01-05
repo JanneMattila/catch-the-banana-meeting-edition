@@ -115,7 +115,11 @@ namespace CTB.Server.Logic
 
                     if (distance < 10)
                     {
-                        // TODO: Monkey has been eaten by the shark!
+                        // Monkey has been eaten by the shark!
+                        monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2);
+                        monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2);
+
+                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
                     }
                 }
 

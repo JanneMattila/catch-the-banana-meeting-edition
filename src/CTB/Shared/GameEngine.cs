@@ -172,18 +172,20 @@ namespace CTB.Shared
             return (rotation, movePlayer, changed);
         }
 
-        public void OtherPlayerUpdate(Monkey monkey)
+        public void MonkeyUpdate(Monkey monkey)
         {
-            _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
-            _game.Monkeys.Add(monkey);
+            if (_game.Me.ID == monkey.ID)
+            {
+                SetPlayer(monkey);
+            }
+            else
+            {
+                _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
+                _game.Monkeys.Add(monkey);
+            }
         }
 
-        public void OtherPlayerConnected(Monkey monkey)
-        {
-            OtherPlayerUpdate(monkey);
-        }
-
-        public void OtherPlayerDisconnected(Monkey monkey)
+        public void MonkeyDelete(Monkey monkey)
         {
             _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
         }

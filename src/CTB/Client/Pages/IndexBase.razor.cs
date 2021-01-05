@@ -53,13 +53,13 @@ namespace CTB.Client.Pages
 
             _hubConnection.On(HubConstants.MoveMonkeyEventMethod, (Monkey monkey) =>
             {
-                _gameEngine.OtherPlayerUpdate(monkey);
+                _gameEngine.MonkeyUpdate(monkey);
                 StateHasChanged();
             });
 
             _hubConnection.On(HubConstants.MonkeyConnectedEventMethod, (Monkey monkey) =>
             {
-                _gameEngine.OtherPlayerConnected(monkey);
+                _gameEngine.MonkeyUpdate(monkey);
                 StateHasChanged();
             });
 
@@ -98,7 +98,7 @@ namespace CTB.Client.Pages
 
         private void MonkeyDisconnected(Monkey monkey)
         {
-            _gameEngine.OtherPlayerDisconnected(monkey);
+            _gameEngine.MonkeyDelete(monkey);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
