@@ -14,7 +14,7 @@ namespace CTB.Shared.Interfaces
         public double Rotation { get; set; }
 
         [JsonPropertyName("speed")]
-        public int Speed { get; set; }
+        public double Speed { get; set; }
 
         public override string ToString()
         {

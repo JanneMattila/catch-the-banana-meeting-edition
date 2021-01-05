@@ -99,12 +99,29 @@ namespace CTB.Shared
             {
                 if (shark.Position.Speed > 0)
                 {
-                    shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
-                    shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
+                    var monkey = GetMonkey(shark.Follows);
+                    if (monkey != null)
+                    {
+                        shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
+                        shark.Position.X += (int)Math.Round(shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation));
+                        shark.Position.Y += (int)Math.Round(shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation));
+                    }
                 }
             }
 
             _executeDraw(_game);
+        }
+
+        private Monkey GetMonkey(string id)
+        {
+            if (_game.Me.ID == id)
+            {
+                return _game.Me;
+            }
+            else
+            {
+                return _game.Monkeys.FirstOrDefault(m => m.ID == id);
+            }
         }
 
         private (double, bool, bool) HandleKeyboard()

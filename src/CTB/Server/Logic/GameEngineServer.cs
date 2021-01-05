@@ -122,11 +122,11 @@ namespace CTB.Server.Logic
                 if (closestMonkey != null)
                 {
                     shark.Position.Rotation = CalculateAngle(shark.Position, closestMonkey.Position);
-                        
-                    _logger.LogInformation($"Closed monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
 
-                    shark.Position.X += (int)Math.Round(delta * Math.Cos(shark.Position.Rotation));
-                    shark.Position.Y += (int)Math.Round(delta * Math.Sin(shark.Position.Rotation));
+                    _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
+
+                    shark.Position.X += (int)Math.Round(shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation));
+                    shark.Position.Y += (int)Math.Round(shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation));
 
                     if (closestMonkey.ID != shark.Follows)
                     {
@@ -145,7 +145,7 @@ namespace CTB.Server.Logic
                     {
                         X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
                         Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2),
-                        Speed = 1
+                        Speed = 0.5
                     }
                 };
                 _repository.AddShark(shark);
