@@ -90,8 +90,8 @@ namespace CTB.Server.Logic
                     ID = Guid.NewGuid().ToString("B"),
                     Position = new Position()
                     {
-                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
-                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2)
+                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2),
+                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2)
                     }
                 };
                 _repository.AddBanana(banana);
@@ -116,8 +116,8 @@ namespace CTB.Server.Logic
                     if (distance < 10)
                     {
                         // Monkey has been eaten by the shark!
-                        monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2);
-                        monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2);
+                        monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
+                        monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
 
                         await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
                     }
@@ -147,8 +147,8 @@ namespace CTB.Server.Logic
                     ID = Guid.NewGuid().ToString("B"),
                     Position = new Position()
                     {
-                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Width - WorldConstants.BorderRadius * 2),
-                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Height - WorldConstants.BorderRadius * 2),
+                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2),
+                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2),
                         Speed = 0.5
                     }
                 };
