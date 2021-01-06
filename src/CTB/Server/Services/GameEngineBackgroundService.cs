@@ -39,7 +39,7 @@ namespace CTB.Server.Services
                 if (updates)
                 {
                     // Run game engine all the time.
-                    // In reality this delay is ~20ms which is for game like this
+                    // In reality this delay is ~20ms which is okay for game like this
                     await Task.Delay(1, stoppingToken);
                 }
                 else

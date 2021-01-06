@@ -62,8 +62,8 @@ namespace CTB.Server.Logic
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += (int)Math.Round(delta * Math.Cos(monkey.Position.Rotation));
-                    monkey.Position.Y += (int)Math.Round(delta * Math.Sin(monkey.Position.Rotation));
+                    monkey.Position.X += delta * Math.Cos(monkey.Position.Rotation);
+                    monkey.Position.Y += delta * Math.Sin(monkey.Position.Rotation);
 
                     foreach (var banana in bananas)
                     {
@@ -116,19 +116,6 @@ namespace CTB.Server.Logic
                         closestMonkey = monkey;
                         closestDistance = distance;
                     }
-
-                    if (distance < WorldConstants.Shark.Width)
-                    {
-                        var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
-                        if (collision)
-                        {
-                            // Monkey has been eaten by the shark!
-                            monkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
-                            monkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
-
-                            await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
-                        }
-                    }
                 }
 
                 if (closestMonkey != null)
@@ -137,13 +124,23 @@ namespace CTB.Server.Logic
 
                     _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
 
-                    shark.Position.X += (int)Math.Round(shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation));
-                    shark.Position.Y += (int)Math.Round(shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation));
+                    shark.Position.X += shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation);
+                    shark.Position.Y += shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation);
 
                     if (closestMonkey.ID != shark.Follows)
                     {
                         shark.Follows = closestMonkey.ID;
                         await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
+                    }
+
+                    var collision = CheckCollision(closestMonkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
+                    if (collision)
+                    {
+                        // Monkey has been eaten by the shark!
+                        closestMonkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
+                        closestMonkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
+
+                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, closestMonkey);
                     }
                 }
             }

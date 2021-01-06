@@ -9,6 +9,8 @@ namespace CTB.Shared
         public static readonly Size Screen = new(640, 480);
         public static readonly Size Banana = new(7, 12);
         public static readonly Size Monkey = new(16, 16);
-        public static readonly Size Shark = new(35, 13);
+
+        // Note: Significantly smaller to require large overlap to be able to catch the monkey
+        public static readonly Size Shark = new(30, 8);
     }
 }

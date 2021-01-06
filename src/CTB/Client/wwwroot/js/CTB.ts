@@ -190,15 +190,17 @@ const getPlayerId = () => {
 }
 
 const drawImage = (img: HTMLImageElement, position: any) => {
+    const x = Math.round(position.x);
+    const y = Math.round(position.y);
     if (position.rotation >= Math.PI * 3 / 2 || position.rotation <= Math.PI / 2) {
         _context.save();
-        _context.translate(position.x + img.width / 2, position.y - img.height / 2);
+        _context.translate(x + img.width / 2, y - img.height / 2);
         _context.scale(-1, 1);
         _context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
         _context.restore();
     }
     else {
-    _context.drawImage(img, position.x - img.width / 2, position.y - img.height / 2);
+    _context.drawImage(img, x - img.width / 2, y - img.height / 2);
     }
 }
 
@@ -206,8 +208,8 @@ CTB.requestAnimationFrame = (timestamp: number) => {
     const delta = timestamp - _timestamp;
     _timestamp = timestamp;
     if (_dotnetRef !== undefined) {
-        const SPEED_CONSTANT = 10;
-        _dotnetRef.invokeMethod("GameUpdate", delta / SPEED_CONSTANT);
+        const SPEED_CONSTANT = 0.1;
+        _dotnetRef.invokeMethod("GameUpdate", delta * SPEED_CONSTANT);
     }
     window.requestAnimationFrame(CTB.requestAnimationFrame.bind(CTB));
 }

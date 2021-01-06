@@ -75,8 +75,8 @@ namespace CTB.Shared
         {
             if (_game.Me.Position.Speed > 0)
             {
-                _game.Me.Position.X += (int)Math.Round(delta * Math.Cos(_game.Me.Position.Rotation));
-                _game.Me.Position.Y += (int)Math.Round(delta * Math.Sin(_game.Me.Position.Rotation));
+                _game.Me.Position.X += delta * Math.Cos(_game.Me.Position.Rotation);
+                _game.Me.Position.Y += delta * Math.Sin(_game.Me.Position.Rotation);
             }
 
             _positionUpdated += delta;
@@ -90,8 +90,8 @@ namespace CTB.Shared
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += (int)Math.Round(delta * Math.Cos(monkey.Position.Rotation));
-                    monkey.Position.Y += (int)Math.Round(delta * Math.Sin(monkey.Position.Rotation));
+                    monkey.Position.X += delta * Math.Cos(monkey.Position.Rotation);
+                    monkey.Position.Y += delta * Math.Sin(monkey.Position.Rotation);
                 }
             }
 
@@ -103,8 +103,8 @@ namespace CTB.Shared
                     if (monkey != null)
                     {
                         shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
-                        shark.Position.X += (int)Math.Round(shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation));
-                        shark.Position.Y += (int)Math.Round(shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation));
+                        shark.Position.X += shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation);
+                        shark.Position.Y += shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation);
                     }
                 }
             }

@@ -5,10 +5,10 @@ namespace CTB.Shared.Interfaces
     public class Position
     {
         [JsonPropertyName("x")]
-        public int X { get; set; }
+        public double X { get; set; }
 
         [JsonPropertyName("y")]
-        public int Y { get; set; }
+        public double Y { get; set; }
 
         [JsonPropertyName("rotation")]
         public double Rotation { get; set; }
