@@ -7,6 +7,31 @@ class CanvasTouch {
     y: number;
 }
 
+// Fullscreen API fixes to Typescript files
+// based on this: https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+interface HTMLDocumentEx extends HTMLDocument {
+    mozFullscreenEnabled: boolean;
+    mozFullscreenElement: Element | null;
+    mozExitFullscreen: () => void | null;
+
+    webkitFullscreenEnabled: boolean;
+    webkitRequestFullscreen: boolean;
+    webkitFullscreenElement: Element | null;
+    webkitExitFullscreen: () => void | null;
+
+    fullscreenEnabled: boolean;
+    fullscreenElement: Element | null;
+}
+
+interface HTMLElementEx extends HTMLElement {
+    mozRequestFullscreen(): void;
+
+    webkitFullscreenEnabled: boolean;
+    webkitRequestFullscreen: () => void | null;
+    webkitFullscreenElement: Element | null;
+    webkitExitFullscreen: () => void | null;
+}
+
 let _timestamp = 0;
 let _canvasElement: HTMLCanvasElement;
 let _context: CanvasRenderingContext2D;
@@ -20,6 +45,59 @@ let _imagesToLoad = -1;
 const _images: Array<HTMLImageElement> = [];
 const SHARK_INDEX = 3;
 const BANANA_INDEX = 4;
+
+const processFullscreenRequest = (x: number, y: number) => {
+
+    if (x < document.body.clientWidth * 0.9 &&
+        y > document.body.clientHeight * 0.1) {
+        return;
+    }
+
+    const d = document as HTMLDocumentEx;
+    const element = d.body as HTMLElementEx;
+
+    if (d.webkitFullscreenEnabled) {
+        if (element.webkitRequestFullscreen) {
+            if (d.webkitFullscreenElement === null) {
+                try {
+                    element.webkitRequestFullscreen();
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                d.webkitExitFullscreen();
+            }
+            return;
+        }
+    }
+    else if (d.mozFullscreenEnabled) {
+        if (element.mozRequestFullscreen) {
+            if (d.mozFullscreenElement === null) {
+                try {
+                    element.mozRequestFullscreen();
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                d.mozExitFullscreen();
+            }
+            return;
+        }
+    }
+    else if (document.fullscreenEnabled) {
+        if (element.requestFullscreen) {
+            if (d.fullscreenElement === null) {
+                element.requestFullscreen();
+            }
+            else {
+                d.exitFullscreen();
+            }
+        }
+        return;
+    }
+}
 
 const resizeCanvas = () => {
     if (_canvasElement !== undefined) {
@@ -45,6 +123,10 @@ window.addEventListener('blur', () => {
 });
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.keyCode === 70 /* F for fullscreen */) {
+        processFullscreenRequest(document.body.clientWidth, document.body.clientHeight);
+        return;
+    }
     if (_dotnetRef !== undefined && !event.altKey && !event.ctrlKey) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
     }
@@ -58,10 +140,13 @@ document.addEventListener('keyup', (event: KeyboardEvent) => {
 
 const setTouchHandlers = (canvas: HTMLCanvasElement) => {
     document.addEventListener('touchstart', (event: TouchEvent) => {
+
         //event.preventDefault();
         for (let i = 0; i < event.changedTouches.length; i++) {
             const touch = event.changedTouches[i];
             //if (touch.clientX < canvas.width / 2) {
+                processFullscreenRequest(touch.clientX, touch.clientY);
+
                 _leftTouchStart = {
                     id: touch.identifier,
                     x: touch.clientX,

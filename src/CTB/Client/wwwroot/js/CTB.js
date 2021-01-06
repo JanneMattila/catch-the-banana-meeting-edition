@@ -13,6 +13,57 @@ let _imagesToLoad = -1;
 const _images = [];
 const SHARK_INDEX = 3;
 const BANANA_INDEX = 4;
+const processFullscreenRequest = (x, y) => {
+    if (x < document.body.clientWidth * 0.9 &&
+        y > document.body.clientHeight * 0.1) {
+        return;
+    }
+    const d = document;
+    const element = d.body;
+    if (d.webkitFullscreenEnabled) {
+        if (element.webkitRequestFullscreen) {
+            if (d.webkitFullscreenElement === null) {
+                try {
+                    element.webkitRequestFullscreen();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                d.webkitExitFullscreen();
+            }
+            return;
+        }
+    }
+    else if (d.mozFullscreenEnabled) {
+        if (element.mozRequestFullscreen) {
+            if (d.mozFullscreenElement === null) {
+                try {
+                    element.mozRequestFullscreen();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                d.mozExitFullscreen();
+            }
+            return;
+        }
+    }
+    else if (document.fullscreenEnabled) {
+        if (element.requestFullscreen) {
+            if (d.fullscreenElement === null) {
+                element.requestFullscreen();
+            }
+            else {
+                d.exitFullscreen();
+            }
+        }
+        return;
+    }
+};
 const resizeCanvas = () => {
     if (_canvasElement !== undefined) {
         _canvasElement.width = window.innerWidth * 0.9;
@@ -33,6 +84,10 @@ window.addEventListener('blur', () => {
     }
 });
 document.addEventListener('keydown', (event) => {
+    if (event.keyCode === 70 /* F for fullscreen */) {
+        processFullscreenRequest(document.body.clientWidth, document.body.clientHeight);
+        return;
+    }
     if (_dotnetRef !== undefined && !event.altKey && !event.ctrlKey) {
         _dotnetRef.invokeMethod("CanvasKeyDown", event.keyCode);
     }
@@ -48,6 +103,7 @@ const setTouchHandlers = (canvas) => {
         for (let i = 0; i < event.changedTouches.length; i++) {
             const touch = event.changedTouches[i];
             //if (touch.clientX < canvas.width / 2) {
+            processFullscreenRequest(touch.clientX, touch.clientY);
             _leftTouchStart = {
                 id: touch.identifier,
                 x: touch.clientX,
