@@ -350,6 +350,9 @@ CTB.draw = (game) => {
             }
         }
     }
+
+    _context.fillStyle = "black";
+    _context.fillText(`${_canvasElement.width}x${_canvasElement.height}, scale ${scale}`, 50, 50);
     
     _context.restore();
 };
