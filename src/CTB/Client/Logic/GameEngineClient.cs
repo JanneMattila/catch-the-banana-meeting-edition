@@ -195,9 +195,17 @@ namespace CTB.Client.Logic
             _game.Bananas.Add(banana);
         }
 
-        public void BananaDelete(string id)
+        public void BananaDelete(string id, List<string> monkeyPoints)
         {
             _game.Bananas.RemoveAll(m => m.ID == id);
+            foreach (var monkeyPoint in monkeyPoints)
+            {
+                var monkey = GetMonkey(monkeyPoint);
+                if (monkey != null)
+                {
+                    monkey.Score++;
+                }
+            }
         }
 
         public void SharkUpdate(Shark shark)

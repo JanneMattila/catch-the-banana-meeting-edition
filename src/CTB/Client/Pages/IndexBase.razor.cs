@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -75,9 +76,9 @@ namespace CTB.Client.Pages
                 _gameEngine.BananaUpdate(banana);
                 StateHasChanged();
             });
-            _hubConnection.On(HubConstants.DeleteBananaEventMethod, (string id) =>
+            _hubConnection.On(HubConstants.DeleteBananaEventMethod, (string id, List<string> monkeyPoints) =>
             {
-                _gameEngine.BananaDelete(id);
+                _gameEngine.BananaDelete(id, monkeyPoints);
                 StateHasChanged();
             });
 

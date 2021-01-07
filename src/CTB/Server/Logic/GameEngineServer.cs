@@ -42,7 +42,7 @@ namespace CTB.Server.Logic
             var monkeys = _repository.GetMonkeys();
             var sharks = _repository.GetSharks();
             var bananas = _repository.GetBananas();
-            var eatenBananas = new HashSet<string>();
+            var eatenBananas = new Dictionary<string, List<string>>();
 
             foreach (var monkey in monkeys)
             {
@@ -58,7 +58,17 @@ namespace CTB.Server.Logic
                             if (collision)
                             {
                                 monkey.Score++;
-                                eatenBananas.Add(banana.ID);
+                                if (eatenBananas.ContainsKey(banana.ID))
+                                {
+                                    eatenBananas[banana.ID].Add(monkey.ID);
+                                }
+                                else
+                                {
+                                    eatenBananas[banana.ID] = new List<string>()
+                                    {
+                                        monkey.ID
+                                    };
+                                }
                             }
                         }
                     }
@@ -67,8 +77,8 @@ namespace CTB.Server.Logic
 
             foreach (var eatenBanana in eatenBananas)
             {
-                _repository.DeleteBanana(eatenBanana);
-                await _gameHub.Clients.All.SendAsync(HubConstants.DeleteBananaEventMethod, eatenBanana);
+                _repository.DeleteBanana(eatenBanana.Key);
+                await _gameHub.Clients.All.SendAsync(HubConstants.DeleteBananaEventMethod, eatenBanana.Key, eatenBanana.Value);
             }
 
             if (!bananas.Any())
