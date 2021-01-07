@@ -1,11 +1,10 @@
-﻿using CTB.Shared.Interfaces;
+﻿using CTB.Shared;
+using CTB.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CTB.Shared
+namespace CTB.Client.Logic
 {
     public class GameEngine
     {

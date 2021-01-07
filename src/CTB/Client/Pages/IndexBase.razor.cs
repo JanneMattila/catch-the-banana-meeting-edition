@@ -1,4 +1,5 @@
-﻿using CTB.Shared;
+﻿using CTB.Client.Logic;
+using CTB.Shared;
 using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
