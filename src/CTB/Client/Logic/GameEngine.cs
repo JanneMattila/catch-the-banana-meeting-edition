@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CTB.Client.Logic
 {
-    public class GameEngine
+    public class GameEngine : GameEngineBase
     {
         private Game _game = new();
         private Action<Game> _executeDraw;
@@ -74,8 +74,7 @@ namespace CTB.Client.Logic
         {
             if (_game.Me.Position.Speed > 0)
             {
-                _game.Me.Position.X += delta * Math.Cos(_game.Me.Position.Rotation);
-                _game.Me.Position.Y += delta * Math.Sin(_game.Me.Position.Rotation);
+                MoveObject(_game.Me.Position, delta);
             }
 
             _positionUpdated += delta;
@@ -89,8 +88,7 @@ namespace CTB.Client.Logic
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += delta * Math.Cos(monkey.Position.Rotation);
-                    monkey.Position.Y += delta * Math.Sin(monkey.Position.Rotation);
+                    MoveObject(monkey.Position, delta);
                 }
             }
 
@@ -102,8 +100,7 @@ namespace CTB.Client.Logic
                     if (monkey != null)
                     {
                         shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
-                        shark.Position.X += shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation);
-                        shark.Position.Y += shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation);
+                        MoveObject(shark.Position, delta);
                     }
                 }
             }
@@ -213,27 +210,6 @@ namespace CTB.Client.Logic
         public void SharkDelete(string id)
         {
             _game.Sharks.RemoveAll(m => m.ID == id);
-        }
-
-        private double FixAngle(double angle)
-        {
-            if (angle < 0)
-            {
-                angle += 2 * Math.PI;
-            }
-            else if (angle > 2 * Math.PI)
-            {
-                angle -= 2 * Math.PI;
-            }
-            return angle;
-        }
-
-        private double CalculateAngle(Position from, Position to)
-        {
-            var dx = from.X - to.X;
-            var dy = to.Y - from.Y;
-            var angle = Math.Atan2(dy, dx);
-            return Math.PI - angle;
         }
 
         public void OnCanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)

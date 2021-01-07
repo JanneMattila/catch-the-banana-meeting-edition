@@ -7,12 +7,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CTB.Server.Logic
 {
-    public class GameEngineServer : IGameEngineServer
+    public class GameEngineServer : GameEngineBase, IGameEngineServer
     {
         private readonly ILogger<GameEngineServer> _logger;
         private readonly IRepository _repository;
@@ -38,19 +37,6 @@ namespace CTB.Server.Logic
             return position;
         }
 
-        private static double CalculateDistance(Position left, Position right)
-        {
-            var x1 = left.X;
-            var y1 = left.Y;
-            var x2 = right.X;
-            var y2 = right.Y;
-
-            var dx = x2 - x1;
-            var dy = y2 - y1;
-            var distance = Math.Sqrt(dx * dx + dy * dy);
-            return distance;
-        }
-
         public async Task<bool> UpdateAsync(double delta)
         {
             var monkeys = _repository.GetMonkeys();
@@ -62,9 +48,7 @@ namespace CTB.Server.Logic
             {
                 if (monkey.Position.Speed > 0)
                 {
-                    monkey.Position.X += delta * Math.Cos(monkey.Position.Rotation);
-                    monkey.Position.Y += delta * Math.Sin(monkey.Position.Rotation);
-
+                    MoveObject(monkey.Position, delta);
                     foreach (var banana in bananas)
                     {
                         var distance = CalculateDistance(banana.Position, monkey.Position);
@@ -124,8 +108,7 @@ namespace CTB.Server.Logic
 
                     _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
 
-                    shark.Position.X += shark.Position.Speed * delta * Math.Cos(shark.Position.Rotation);
-                    shark.Position.Y += shark.Position.Speed * delta * Math.Sin(shark.Position.Rotation);
+                    MoveObject(shark.Position, delta);
 
                     if (closestMonkey.ID != shark.Follows)
                     {
@@ -164,35 +147,6 @@ namespace CTB.Server.Logic
             }
 
             return monkeys.Any();
-        }
-
-        private bool CheckCollision(Position position1, Size size1, Position position2, Size size2)
-        {
-            var p1 = new Position()
-            {
-                X = position1.X - size1.Width / 2,
-                Y = position1.Y - size1.Height / 2
-            };
-            var p2 = new Position()
-            {
-                X = position2.X - size2.Width / 2,
-                Y = position2.Y - size2.Height / 2
-            };
-
-            if (p1.X > p2.X + size2.Width || p1.Y > p2.Y + size2.Height ||
-                p2.X > p1.X + size1.Width || p2.Y > p1.Y + size1.Height)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private double CalculateAngle(Position from, Position to)
-        {
-            var dx = from.X - to.X;
-            var dy = to.Y - from.Y;
-            var angle = Math.Atan2(dy, dx);
-            return Math.PI - angle;
         }
     }
 }
