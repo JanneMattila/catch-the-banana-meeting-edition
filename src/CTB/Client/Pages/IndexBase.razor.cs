@@ -25,7 +25,7 @@ namespace CTB.Client.Pages
         public string WelcomeVisibility { get; set; } = ElementVisibility.None;
 
         protected ElementReference _canvas;
-        protected GameEngine _gameEngine = new();
+        protected GameEngineClient _gameEngine = new();
 
         private DotNetObjectReference<IndexBase> _selfRef;
         private HubConnection _hubConnection;

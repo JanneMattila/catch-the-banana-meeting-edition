@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CTB.Client.Logic
 {
-    public class GameEngine : GameEngineBase
+    public class GameEngineClient : GameEngineBase
     {
         private Game _game = new();
         private Action<Game> _executeDraw;
