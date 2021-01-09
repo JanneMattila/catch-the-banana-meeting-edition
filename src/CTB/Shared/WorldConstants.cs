@@ -4,7 +4,7 @@ namespace CTB.Shared
 {
     public static class WorldConstants
     {
-        public const int BorderRadius = 20;
+        public const int BorderRadius = 10;
 
         public static readonly Size Screen = new(600, 400);
         public static readonly Size Banana = new(7, 12);

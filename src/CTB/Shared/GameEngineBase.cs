@@ -86,7 +86,7 @@ namespace CTB.Shared
             }
             else if (position.Y > WorldConstants.Screen.Height - WorldConstants.BorderRadius)
             {
-                position.X = WorldConstants.Screen.Height - WorldConstants.BorderRadius;
+                position.Y = WorldConstants.Screen.Height - WorldConstants.BorderRadius;
             }
         }
 
