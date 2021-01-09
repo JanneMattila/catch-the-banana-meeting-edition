@@ -1,6 +1,7 @@
 ﻿using CTB.Server.Logic;
 using CTB.Shared;
 using CTB.Shared.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,7 +11,11 @@ namespace CTB.Server.Data
 {
     public class Repository : IRepository
     {
-        private readonly ConcurrentDictionary<string, Monkey> _monkeys = new();
+        private readonly MemoryCache _monkeys = new(new MemoryCacheOptions()
+        {
+            ExpirationScanFrequency = TimeSpan.FromMinutes(10)
+        });
+
         private readonly ConcurrentDictionary<string, Shark> _sharks = new();
         private readonly ConcurrentDictionary<string, Banana> _bananas = new();
         private readonly ConcurrentDictionary<string, string> _mapConnectionID2PlayerID = new();
@@ -32,7 +37,7 @@ namespace CTB.Server.Data
             {
                 var playerID = _mapConnectionID2PlayerID[connectionID];
                 _mapConnectionID2PlayerID.Remove(connectionID, out _);
-                return _monkeys[playerID];
+                return _monkeys.Get<Monkey>(playerID);
             }
             return null;
         }
@@ -45,30 +50,41 @@ namespace CTB.Server.Data
 
         public Monkey GetByPlayerID(string playerID)
         {
-            if (_monkeys.ContainsKey(playerID))
+            if (_monkeys.TryGetValue<Monkey>(playerID, out var existingMonkey))
             {
-                return _monkeys[playerID];
+                return existingMonkey;
             }
 
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromHours(1));
+
             var name = PlayerNameGenerator.CreateName();
-            _monkeys[playerID] = new Monkey()
+            var monkey = new Monkey()
             {
                 ID = playerID,
                 Name = name,
                 Score = 0,
-                UI = _random.Next(1, 7),
+                UI = _random.Next(0, 6),
                 Position = new Position()
                 {
                     X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius),
                     Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius)
                 }
             };
-            return _monkeys[playerID];
+
+            _monkeys.Set(playerID, monkey, cacheEntryOptions);
+
+            return monkey;
         }
 
-        public List<Monkey> GetMonkeys()
+        public List<Monkey> GetConnectedMonkeys()
         {
-            return _monkeys.Values.ToList();
+            var list = new List<Monkey>();
+            foreach (var item in _mapConnectionID2PlayerID)
+            {
+                list.Add(_monkeys.Get<Monkey>(item.Value));
+            }
+            return list;
         }
 
         public void AddShark(Shark shark)

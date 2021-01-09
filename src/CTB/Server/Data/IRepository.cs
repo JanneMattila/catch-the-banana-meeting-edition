@@ -8,7 +8,7 @@ namespace CTB.Server.Data
         Monkey GetByConnectionID(string playerID);
         Monkey GetByPlayerID(string playerID);
         
-        List<Monkey> GetMonkeys();
+        List<Monkey> GetConnectedMonkeys();
 
         Monkey DeleteByConnectionID(string connectionID);
         Monkey MapConnectionIDToPlayer(string connectionID, string playerID);

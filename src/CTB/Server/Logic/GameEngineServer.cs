@@ -38,7 +38,7 @@ namespace CTB.Server.Logic
 
         public async Task<bool> UpdateAsync(double delta)
         {
-            var monkeys = _repository.GetMonkeys();
+            var monkeys = _repository.GetConnectedMonkeys();
             var sharks = _repository.GetSharks();
             var bananas = _repository.GetBananas();
             var eatenBananas = new Dictionary<string, List<string>>();

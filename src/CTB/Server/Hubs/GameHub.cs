@@ -26,7 +26,7 @@ namespace CTB.Server.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            foreach (var monkey in _repository.GetMonkeys())
+            foreach (var monkey in _repository.GetConnectedMonkeys())
             {
                 await Clients.Caller.SendAsync(HubConstants.MonkeyConnectedEventMethod, monkey);
             }
