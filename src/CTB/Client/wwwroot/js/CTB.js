@@ -292,6 +292,12 @@ CTB.draw = (game) => {
     const scale = 2;
     _context.scale(scale, scale);
     if (game !== undefined) {
+        _context.fillStyle = "black";
+        _context.fillText(`Score: ${game.me.score}`, 15, 15);
+        for (let i = 0; i < game.monkeys.length; i++) {
+            const monkey = game.monkeys[i];
+            _context.fillText(`${monkey.name} score: ${monkey.score}`, 15, 30 + i * 15);
+        }
         if (_imagesLoaded === _imagesToLoad) {
             for (let i = 0; i < game.bananas.length; i++) {
                 const banana = game.bananas[i];
@@ -308,8 +314,6 @@ CTB.draw = (game) => {
             }
         }
     }
-    _context.fillStyle = "black";
-    _context.fillText(`${_canvasElement.width}x${_canvasElement.height}, scale ${scale}`, 50, 50);
     _context.restore();
 };
 //# sourceMappingURL=CTB.js.map
