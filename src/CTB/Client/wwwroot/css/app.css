@@ -16,14 +16,32 @@ html, body {
     text-align: center;
 }
 
-.game {
-    position: absolute;
-    border-radius: 10px;
-    top: 5%;
-    left: 5%;
-    width: 90%;
-    height: 90%;
-    display: table-cell;
+@media only screen and (max-width: 800px) {
+    .game {
+        position: absolute;
+        display: table-cell;
+        border-radius: 10px;
+        top: 2%;
+        left: 2%;
+        right: 2%;
+        bottom: 2%;
+        width: 96%;
+        height: 96%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .game {
+        position: absolute;
+        display: table-cell;
+        border-radius: 10px;
+        top: 5%;
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
+        width: 90%;
+        height: 90%;
+    }
 }
 
 .welcome {

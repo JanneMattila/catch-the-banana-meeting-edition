@@ -9,6 +9,8 @@ namespace CTB.Shared
 {
     public class GameEngineBase
     {
+        protected readonly Random _random = new();
+
         protected double FixAngle(double angle)
         {
             if (angle < 0)
@@ -68,6 +70,30 @@ namespace CTB.Shared
         {
             position.X += position.Speed * delta * Math.Cos(position.Rotation);
             position.Y += position.Speed * delta * Math.Sin(position.Rotation);
+
+            if (position.X < WorldConstants.BorderRadius)
+            {
+                position.X = WorldConstants.BorderRadius;
+            }
+            else if (position.X > WorldConstants.Screen.Width - WorldConstants.BorderRadius)
+            {
+                position.X = WorldConstants.Screen.Width - WorldConstants.BorderRadius;
+            }
+
+            if (position.Y < WorldConstants.BorderRadius)
+            {
+                position.Y = WorldConstants.BorderRadius;
+            }
+            else if (position.Y > WorldConstants.Screen.Height - WorldConstants.BorderRadius)
+            {
+                position.X = WorldConstants.Screen.Height - WorldConstants.BorderRadius;
+            }
+        }
+
+        protected void CreateRandomPosition(Position position)
+        {
+            position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius);
+            position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius);
         }
     }
 }

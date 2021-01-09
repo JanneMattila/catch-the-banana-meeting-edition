@@ -101,8 +101,30 @@ const processFullscreenRequest = (x: number, y: number) => {
 
 const resizeCanvas = () => {
     if (_canvasElement !== undefined) {
-        _canvasElement.width = window.innerWidth * 0.9;
-        _canvasElement.height = window.innerHeight * 0.9;
+        const element = document.getElementById("game");
+
+        const maxWidth = document.documentElement.clientWidth;
+        const maxHeight = document.documentElement.clientHeight;
+
+        _canvasElement.width = 1200;
+        _canvasElement.height = 800;
+        const aspectRatio = _canvasElement.width / _canvasElement.height;
+        
+        const availableWidth = maxWidth * 0.9;
+        const availableHeight = maxHeight * 0.9;
+        let resizeWidth = availableWidth;
+        let resizeHeight = availableWidth / aspectRatio;
+        if (availableHeight < resizeHeight) {
+            console.log(`Height resized to ${resizeHeight} but space only for ${availableHeight}`)
+            resizeHeight = availableHeight;
+            resizeWidth = availableHeight * aspectRatio;
+            if (availableWidth < resizeWidth) {
+                console.log(`Width resized to ${resizeWidth} but space only for ${availableWidth}`)
+            }
+        }
+
+        element.style.width = `${Math.round(resizeWidth)}px`;
+        element.style.height = `${Math.round(resizeHeight)}px`;
     }
 }
 
@@ -327,6 +349,9 @@ CTB.draw = (game) => {
     _context.fillRect(0, 0, _canvasElement.width, _canvasElement.height);
     _context.fill();
 
+    // Some screen resolution references for canvas:
+    // Mobile: 697x370 Landscape fullscreen (625 without fullscreen)
+    // Desktop: 1350x 772
     const scale = 2;
     _context.scale(scale, scale);
     if (game !== undefined) {

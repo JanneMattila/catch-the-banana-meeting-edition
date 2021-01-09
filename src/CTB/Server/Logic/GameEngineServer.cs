@@ -16,7 +16,6 @@ namespace CTB.Server.Logic
         private readonly ILogger<GameEngineServer> _logger;
         private readonly IRepository _repository;
         private readonly IHubContext<GameHub> _gameHub;
-        private readonly Random _random = new();
 
         public GameEngineServer(IRepository repository, IHubContext<GameHub> gameHub, ILogger<GameEngineServer> logger)
         {
@@ -85,13 +84,9 @@ namespace CTB.Server.Logic
             {
                 var banana = new Banana()
                 {
-                    ID = Guid.NewGuid().ToString("B"),
-                    Position = new Position()
-                    {
-                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2),
-                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2)
-                    }
+                    ID = Guid.NewGuid().ToString("B")
                 };
+                CreateRandomPosition(banana.Position);
                 _repository.AddBanana(banana);
 
                 _logger.LogInformation(LoggingEvents.GameEngineAddBanana, $"Add Banana ID: {banana.ID}, {banana.Position}");
@@ -130,8 +125,7 @@ namespace CTB.Server.Logic
                     if (collision)
                     {
                         // Monkey has been eaten by the shark!
-                        closestMonkey.Position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2);
-                        closestMonkey.Position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2);
+                        CreateRandomPosition(closestMonkey.Position);
 
                         await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, closestMonkey);
                     }
@@ -142,14 +136,12 @@ namespace CTB.Server.Logic
             {
                 var shark = new Shark()
                 {
-                    ID = Guid.NewGuid().ToString("B"),
-                    Position = new Position()
-                    {
-                        X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius * 2),
-                        Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius * 2),
-                        Speed = 0.5
-                    }
+                    ID = Guid.NewGuid().ToString("B")
                 };
+                shark.Position.Speed = 0.5;
+
+                CreateRandomPosition(shark.Position);
+
                 _repository.AddShark(shark);
 
                 _logger.LogInformation(LoggingEvents.GameEngineAddShark, $"Add Shark ID: {shark.ID}, {shark.Position}");
