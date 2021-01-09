@@ -93,25 +93,39 @@ namespace CTB.Server.Logic
                 await _gameHub.Clients.All.SendAsync(HubConstants.MoveBananaEventMethod, banana);
             }
 
+            var trackedMonkey = new List<string>();
             foreach (var shark in sharks)
             {
                 Monkey closestMonkey = null;
-                var closestDistance = double.MaxValue;
                 foreach (var monkey in monkeys)
                 {
-                    var distance = CalculateDistance(shark.Position, monkey.Position);
-                    if (distance < closestDistance)
+                    var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
+                    if (collision)
                     {
+                        // Monkey has been eaten by the shark!
+                        CreateRandomPosition(monkey.Position);
+
+                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
+                    }
+                    else
+                    {
+                        if (trackedMonkey.Contains(monkey.ID))
+                        {
+                            // Some other shark is already tracking this monkey.
+                            continue;
+                        }
+
                         closestMonkey = monkey;
-                        closestDistance = distance;
                     }
                 }
 
                 if (closestMonkey != null)
                 {
+                    trackedMonkey.Add(closestMonkey.ID);
+
                     shark.Position.Rotation = CalculateAngle(shark.Position, closestMonkey.Position);
 
-                    _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {closestDistance}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
+                    _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
 
                     MoveObject(shark.Position, delta);
 
@@ -120,19 +134,11 @@ namespace CTB.Server.Logic
                         shark.Follows = closestMonkey.ID;
                         await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
                     }
-
-                    var collision = CheckCollision(closestMonkey.Position, WorldConstants.Monkey, shark.Position, WorldConstants.Shark);
-                    if (collision)
-                    {
-                        // Monkey has been eaten by the shark!
-                        CreateRandomPosition(closestMonkey.Position);
-
-                        await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, closestMonkey);
-                    }
                 }
             }
 
-            if (!sharks.Any())
+            const int monkeyToSharkRatio = 1;
+            if (sharks.Count * monkeyToSharkRatio < monkeys.Count)
             {
                 var shark = new Shark()
                 {
@@ -146,6 +152,12 @@ namespace CTB.Server.Logic
 
                 _logger.LogInformation(LoggingEvents.GameEngineAddShark, $"Add Shark ID: {shark.ID}, {shark.Position}");
                 await _gameHub.Clients.All.SendAsync(HubConstants.MoveSharkEventMethod, shark);
+            }
+            else if (sharks.Count * monkeyToSharkRatio > monkeys.Count)
+            {
+                var shark = sharks.First();
+                _repository.DeleteShark(shark.ID);
+                await _gameHub.Clients.All.SendAsync(HubConstants.DeleteSharkEventMethod, shark.ID, shark);
             }
 
             return monkeys.Any();
