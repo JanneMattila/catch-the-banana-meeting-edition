@@ -1,4 +1,5 @@
 ﻿using CTB.Server.Logic;
+using CTB.Shared;
 using CTB.Shared.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -55,11 +56,11 @@ namespace CTB.Server.Data
                 ID = playerID,
                 Name = name,
                 Score = 0,
-                UI = _random.Next(1, 3),
+                UI = _random.Next(1, 7),
                 Position = new Position()
                 {
-                    X = _random.Next(10, 150),
-                    Y = _random.Next(10, 150)
+                    X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius),
+                    Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius)
                 }
             };
             return _monkeys[playerID];

@@ -11,8 +11,8 @@ let _rightTouchCurrent = undefined;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images = [];
-const SHARK_INDEX = 3;
-const BANANA_INDEX = 4;
+const SHARK_INDEX = 6;
+const BANANA_INDEX = 7;
 const processFullscreenRequest = (x, y) => {
     if (x < document.body.clientWidth * 0.9 &&
         y > document.body.clientHeight * 0.1) {
@@ -200,6 +200,9 @@ const loadImages = () => {
         "monkey1.png",
         "monkey2.png",
         "monkey3.png",
+        "monkey4.png",
+        "monkey5.png",
+        "monkey6.png",
         "shark.png",
         "banana.png"
     ];
@@ -292,7 +295,8 @@ CTB.draw = (game) => {
     const scale = 2;
     _context.scale(scale, scale);
     if (game !== undefined) {
-        _context.fillStyle = "black";
+        _context.font = "12px Comic Sans MS";
+        _context.fillStyle = "#3e1654";
         _context.fillText(`Score: ${game.me.score}`, 15, 15);
         for (let i = 0; i < game.monkeys.length; i++) {
             const monkey = game.monkeys[i];

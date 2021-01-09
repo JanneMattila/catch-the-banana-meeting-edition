@@ -58,6 +58,9 @@ namespace ImageCreator
             CreatePlayer("monkey1.png", playerImageData, eyes: Color.Red, body: Color.Blue);
             CreatePlayer("monkey2.png", playerImageData, eyes: Color.Blue, body: Color.Brown);
             CreatePlayer("monkey3.png", playerImageData, eyes: Color.DarkBlue, body: Color.DarkKhaki);
+            CreatePlayer("monkey4.png", playerImageData, eyes: Color.Blue, body: Color.Yellow);
+            CreatePlayer("monkey5.png", playerImageData, eyes: Color.Black, body: Color.Violet);
+            CreatePlayer("monkey6.png", playerImageData, eyes: Color.Blue, body: Color.DarkBlue);
 
             CreateImage("shark.png", sharkImageData);
             CreateImage("banana.png", bananaImageData);
@@ -67,11 +70,11 @@ namespace ImageCreator
         {
             var lines = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var rows = lines.Length;
-            var columns = lines[0].Length;
+            var columns = lines[0].Length / 2;
             using var bitmap = new Bitmap(columns, rows, PixelFormat.Format32bppArgb);
             for (int y = 0; y < rows; y++)
             {
-                for (int x = 0; x < columns / 2; x++)
+                for (int x = 0; x < columns; x++)
                 {
                     var c1 = lines[y][x * 2];
                     if (c1 == '.')

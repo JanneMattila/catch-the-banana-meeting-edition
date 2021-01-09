@@ -43,8 +43,8 @@ let _rightTouchCurrent: CanvasTouch = undefined;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images: Array<HTMLImageElement> = [];
-const SHARK_INDEX = 3;
-const BANANA_INDEX = 4;
+const SHARK_INDEX = 6;
+const BANANA_INDEX = 7;
 
 const processFullscreenRequest = (x: number, y: number) => {
 
@@ -251,6 +251,9 @@ const loadImages = () => {
         "monkey1.png",
         "monkey2.png",
         "monkey3.png",
+        "monkey4.png",
+        "monkey5.png",
+        "monkey6.png",
         "shark.png",
         "banana.png"
     ];
@@ -307,7 +310,7 @@ const drawImage = (img: HTMLImageElement, position: any) => {
         _context.restore();
     }
     else {
-    _context.drawImage(img, x - img.width / 2, y - img.height / 2);
+        _context.drawImage(img, x - img.width / 2, y - img.height / 2);
     }
 }
 
@@ -357,9 +360,9 @@ CTB.draw = (game) => {
 
     if (game !== undefined) {
 
-        _context.fillStyle = "black";
+        _context.font = "12px Comic Sans MS";
+        _context.fillStyle = "#3e1654";
         _context.fillText(`Score: ${game.me.score}`, 15, 15);
-
         for (let i = 0; i < game.monkeys.length; i++) {
             const monkey = game.monkeys[i];
             _context.fillText(`${monkey.name} score: ${monkey.score}`, 15, 30 + i * 15);
