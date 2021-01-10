@@ -359,13 +359,18 @@ CTB.draw = (game) => {
     _context.scale(scale, scale);
 
     if (game !== undefined) {
+        for (let i = 0; i < game.scoreBoard.length; i++) {
+            const monkey = game.scoreBoard[i];
 
-        _context.font = "12px Comic Sans MS";
-        _context.fillStyle = "#3e1654";
-        _context.fillText(`Score: ${game.me.score}`, 15, 15);
-        for (let i = 0; i < game.monkeys.length; i++) {
-            const monkey = game.monkeys[i];
-            _context.fillText(`${monkey.name} score: ${monkey.score}`, 15, 30 + i * 15);
+            if (monkey.id === game.me.id) {
+                _context.font = "bold 12px Comic Sans MS";
+                _context.fillStyle = "#2d103d";
+            }
+            else {
+                _context.font = "12px Comic Sans MS";
+                _context.fillStyle = "#3e1654";
+            }
+            _context.fillText(`${monkey.name}: ${monkey.score}`, 15, 15 + i * 15);
         }
 
         if (_imagesLoaded === _imagesToLoad) {

@@ -46,8 +46,7 @@ namespace CTB.Server.Logic
             };
 
             var random = new Random();
-
-            return $"{first[random.Next(first.Length)]}{second[random.Next(second.Length)]}{random.Next(10, 100)}";
+            return $"{first[random.Next(first.Length)]} {second[random.Next(second.Length)]}";
         }
     }
 }

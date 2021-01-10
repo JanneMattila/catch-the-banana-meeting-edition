@@ -171,15 +171,25 @@ namespace CTB.Client.Logic
 
         public void MonkeyUpdate(Monkey monkey)
         {
+            MonkeyDelete(monkey);
+
+            UpdateScoreBoard(monkey);
+
             if (_game.Me.ID == monkey.ID)
             {
                 SetPlayer(monkey);
             }
             else
             {
-                _game.Monkeys.RemoveAll(m => m.ID == monkey.ID);
                 _game.Monkeys.Add(monkey);
             }
+        }
+
+        private void UpdateScoreBoard(Monkey monkey)
+        {
+            _game.ScoreBoard.RemoveAll(m => m.ID == monkey.ID);
+            _game.ScoreBoard.Add(ScoreBoard.FromMonkey(monkey));
+            _game.ScoreBoard.Sort((left, right) => right.Score.CompareTo(left.Score));
         }
 
         public void MonkeyDelete(Monkey monkey)
@@ -204,6 +214,7 @@ namespace CTB.Client.Logic
                 if (monkey != null)
                 {
                     monkey.Score++;
+                    UpdateScoreBoard(monkey);
                 }
             }
         }
