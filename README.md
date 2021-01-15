@@ -8,8 +8,8 @@
 
 ## Background
 
-Original [Catch the banana](https://arcade.makecode.com/29959-08678-58221-91989)
-is done using [Microsoft MakeCode](https://arcade.makecode.com/) and it was
+Original [Catch the Banana](https://arcade.makecode.com/29959-08678-58221-91989)
+was done using [Microsoft MakeCode](https://arcade.makecode.com/) and it was
 practice work for young developer.
 
 This has been now converted into multiplayer version!
