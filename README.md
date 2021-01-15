@@ -3,7 +3,7 @@
 ## Build Status
 
 [![Build Status](https://dev.azure.com/jannemattila/jannemattila/_apis/build/status/JanneMattila.catch-the-banana-meeting-edition?branchName=main)](https://dev.azure.com/jannemattila/jannemattila/_build/latest?definitionId=56&branchName=main)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jannemattila/catch-the-banana?style=plastic)](https://hub.docker.com/r/jannemattila/quizsim)
+[![Docker Pulls](https://img.shields.io/docker/pulls/jannemattila/catch-the-banana?style=plastic)](https://hub.docker.com/r/jannemattila/catch-the-banana)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJanneMattila%2Fcatch-the-banana-meeting-edition%2Fmain%2Fdeploy%2Fazuredeploy.json)
