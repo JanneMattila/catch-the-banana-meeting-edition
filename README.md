@@ -36,6 +36,10 @@ docker build . -t catch-the-banana:latest
 docker run -p "2001:80" catch-the-banana:latest
 ``` 
 
+### How to deploy to Azure App Service
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJanneMattila%2Fcatch-the-banana-meeting-edition%2Fmain%2Fdeploy%2Fazuredeploy.json)
+
 ### How to deploy to Azure Container Instances (ACI)
 
 Deploy published image to [Azure Container Instances (ACI)](https://docs.microsoft.com/en-us/azure/container-instances/) the Azure CLI way:
