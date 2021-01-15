@@ -1,5 +1,5 @@
-param location string
-param appName string
+param location string = resourceGroup().location
+param appName string = 'ctb${uniqueString(resourceGroup().id)}'
 param image string = 'jannemattila/catch-the-banana:latest'
 param sku string = 'B2'
 
