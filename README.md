@@ -6,6 +6,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/jannemattila/catch-the-banana?style=plastic)](https://hub.docker.com/r/jannemattila/quizsim)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJanneMattila%2Fcatch-the-banana-meeting-edition%2Fmain%2Fdeploy%2Fazuredeploy.json)
+
 ## Background
 
 Original [Catch the Banana](https://arcade.makecode.com/29959-08678-58221-91989)
@@ -37,6 +39,10 @@ docker run -p "2001:80" catch-the-banana:latest
 ``` 
 
 ### How to deploy to Azure App Service
+
+Deploys Linux App Service and with
+container from [Docker Hub](https://hub.docker.com/r/jannemattila/catch-the-banana)
+![Monkey](https://raw.githubusercontent.com/JanneMattila/catch-the-banana-meeting-edition/main/src/CTB/Client/wwwroot/images/monkey1.png).
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJanneMattila%2Fcatch-the-banana-meeting-edition%2Fmain%2Fdeploy%2Fazuredeploy.json)
 
@@ -103,3 +109,6 @@ Get-AzContainerInstanceLog -ContainerGroupName $aciName -ResourceGroupName $reso
 # Wipe out the resources
 Remove-AzResourceGroup -Name $resourceGroup -Force
 ```
+
+![Monkey](https://raw.githubusercontent.com/JanneMattila/catch-the-banana-meeting-edition/main/src/CTB/Client/wwwroot/images/monkey2.png)
+![Shark](https://raw.githubusercontent.com/JanneMattila/catch-the-banana-meeting-edition/main/src/CTB/Client/wwwroot/images/shark.png)
