@@ -1,6 +1,7 @@
-param appName string = 'ctb${uniqueString(resourceGroup().id)}'
-param location string = resourceGroup().location
-param sku string = 'S2'
+param location string
+param appName string
+param image string = 'jannemattila/catch-the-banana:latest'
+param sku string = 'B2'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: 'asp-webapp'
@@ -25,7 +26,7 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
       webSocketsEnabled: true
       http20Enabled: true
       ftpsState: 'Disabled'
-      linuxFxVersion: 'DOCKER|jannemattila/catch-the-banana:latest'
+      linuxFxVersion: 'DOCKER|${image}'
     }
     serverFarmId: appServicePlan.id
     httpsOnly: true
