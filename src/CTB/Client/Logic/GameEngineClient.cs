@@ -247,7 +247,7 @@ namespace CTB.Client.Logic
                 //var deltaLeft = FixAngle(rotation - angle);
                 //var deltaRight = FixAngle(angle - _game.Me.Position.Rotation);
                 var len = Math.Sqrt(touchx * touchx + touchy * touchy);
-                _game.Me.Position.Speed = len > 20 ? 1 : 0;
+                _game.Me.Position.Speed = len > 5 ? 1 : 0;
             }
             else
             {

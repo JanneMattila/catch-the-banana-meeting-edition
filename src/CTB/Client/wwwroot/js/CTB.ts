@@ -125,6 +125,11 @@ const resizeCanvas = () => {
 
         element.style.width = `${Math.round(resizeWidth)}px`;
         element.style.height = `${Math.round(resizeHeight)}px`;
+
+        const marginTop = (maxHeight - resizeHeight) / 2
+        const marginLeft = (maxWidth - resizeWidth) / 2
+        element.style.marginTop = `${Math.round(marginTop)}px`;
+        element.style.marginLeft = `${Math.round(marginLeft)}px`;
     }
 }
 
