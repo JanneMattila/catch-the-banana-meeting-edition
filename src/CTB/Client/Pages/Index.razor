@@ -14,3 +14,13 @@
         <button class="btn btn-primary" @onclick="LetsPlayOnClick">Let's play!</button>
     </div>
 </div>
+
+<div class="welcome" style="display: @ConnectionErrorVisibility">
+    <div class="welcome-Text">
+        <img src="/images/connection-error.png" alt="Connection error" /><br />
+        <br />
+        Oh no! We lost the connection to the other monkeys.<br />
+        <br />
+        <button class="btn btn-primary" @onclick="RefreshOnClick">Click to refresh</button>
+    </div>
+</div>

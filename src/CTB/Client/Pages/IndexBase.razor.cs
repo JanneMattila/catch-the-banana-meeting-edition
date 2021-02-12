@@ -24,6 +24,7 @@ namespace CTB.Client.Pages
         private IJSRuntime JSRuntime { get; set; }
 
         public string WelcomeVisibility { get; set; } = ElementVisibility.None;
+        public string ConnectionErrorVisibility { get; set; } = ElementVisibility.None;
 
         protected ElementReference _canvas;
         protected GameEngineClient _gameEngine = new();
@@ -47,6 +48,7 @@ namespace CTB.Client.Pages
                 .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
                 .Build();
 
+            _hubConnection.Closed += HubConnection_Closed;
             _hubConnection.On(HubConstants.PlayerRegisteredEventMethod, (Monkey monkey) =>
             {
                 PlayerRegisteredEventMethod(monkey);
@@ -98,6 +100,12 @@ namespace CTB.Client.Pages
             await base.OnInitializedAsync();
         }
 
+        private Task HubConnection_Closed(Exception arg)
+        {
+            ConnectionErrorVisibility = ElementVisibility.Inline;
+            return Task.CompletedTask;
+        }
+
         private void MonkeyDisconnected(Monkey monkey)
         {
             _gameEngine.MonkeyDelete(monkey);
@@ -123,14 +131,18 @@ namespace CTB.Client.Pages
             WelcomeVisibility = ElementVisibility.Inline;
         }
 
-        protected async Task CanvasOnClick(MouseEventArgs eventArgs)
+        protected Task CanvasOnClick(MouseEventArgs eventArgs)
         {
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected void LetsPlayOnClick()
         {
             WelcomeVisibility = ElementVisibility.None;
+        }
+        protected void RefreshOnClick()
+        {
+            NavigationManager.NavigateTo("/", true);
         }
 
         [JSInvokable]
@@ -141,31 +153,27 @@ namespace CTB.Client.Pages
         }
 
         [JSInvokable]
-        public async void CanvasKeyDown(int keyCode)
+        public void CanvasKeyDown(int keyCode)
         {
             _gameEngine.OnKeyDown(keyCode);
-            await Task.CompletedTask;
         }
 
         [JSInvokable]
-        public async void CanvasKeyUp(int keyCode)
+        public void CanvasKeyUp(int keyCode)
         {
             _gameEngine.OnKeyUp(keyCode);
-            await Task.CompletedTask;
         }
 
         [JSInvokable]
-        public async void CanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
+        public void CanvasTouch(CanvasTouch leftTouchStart, CanvasTouch leftTouchCurrent, CanvasTouch rightTouchCurrent)
         {
             _gameEngine.OnCanvasTouch(leftTouchStart, leftTouchCurrent, rightTouchCurrent);
-            await Task.CompletedTask;
         }
 
         [JSInvokable]
-        public async void GameUpdate(double delta)
+        public void GameUpdate(double delta)
         {
             _gameEngine.Update(delta);
-            await Task.CompletedTask;
         }
 
         public void Dispose()
