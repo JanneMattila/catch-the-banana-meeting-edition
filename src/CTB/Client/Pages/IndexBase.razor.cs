@@ -40,7 +40,15 @@ namespace CTB.Client.Pages
                 if (_hubConnection.State == HubConnectionState.Connected)
                 {
                     Console.WriteLine($"Sending position {position}");
-                    await _hubConnection.InvokeAsync(HubConstants.MoveMonkeyEventMethod, position);
+                    try
+                    {
+                        await _hubConnection.InvokeAsync(HubConstants.MoveMonkeyEventMethod, position);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error while sending request:");
+                        Console.WriteLine(ex);
+                    }
                 }
             });
 
