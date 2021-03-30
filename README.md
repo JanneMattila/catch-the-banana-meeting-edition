@@ -46,11 +46,39 @@ container from [Docker Hub](https://hub.docker.com/r/jannemattila/catch-the-bana
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FJanneMattila%2Fcatch-the-banana-meeting-edition%2Fmain%2Fdeploy%2Fazuredeploy.json)
 
+### How to deploy to Azure App Service using CLI
+
+```powershell
+$appServiceName="catch-the-banana"
+$appServicePlanName="ctbPlan"
+$resourceGroup="catch-the-banana-dev-rg"
+$location="westeurope"
+$image="jannemattila/catch-the-banana"
+
+# Login to Azure
+az login
+
+# *Explicitly* select your working context
+az account set --subscription <YourSubscriptionName>
+
+# Create new resource group
+az group create --name $resourceGroup --location $location -o table
+
+# Create App Service Plan
+az appservice plan create --name $appServicePlanName --resource-group $resourceGroup --is-linux --number-of-workers 1 --sku B2 -o table
+
+# Create App Service
+az webapp create --name $appServiceName --plan $appServicePlanName --resource-group $resourceGroup -i $image -o table
+
+# Wipe out the resources
+az group delete --name $resourceGroup -y
+```
+
 ### How to deploy to Azure Container Instances (ACI)
 
 Deploy published image to [Azure Container Instances (ACI)](https://docs.microsoft.com/en-us/azure/container-instances/) the Azure CLI way:
 
-```batch
+```bash
 # Variables
 aciName="catch-the-banana"
 resourceGroup="catch-the-banana-dev-rg"
