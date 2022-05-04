@@ -1,16 +1,15 @@
 ﻿using CTB.Shared.Interfaces;
 
-namespace CTB.Shared
+namespace CTB.Shared;
+
+public static class WorldConstants
 {
-    public static class WorldConstants
-    {
-        public const int BorderRadius = 10;
+    public const int BorderRadius = 10;
 
-        public static readonly Size Screen = new(600, 400);
-        public static readonly Size Banana = new(7, 12);
-        public static readonly Size Monkey = new(16, 16);
+    public static readonly Size Screen = new(600, 400);
+    public static readonly Size Banana = new(7, 12);
+    public static readonly Size Monkey = new(16, 16);
 
-        // Note: Significantly smaller to require large overlap to be able to catch the monkey
-        public static readonly Size Shark = new(30, 8);
-    }
+    // Note: Significantly smaller to require large overlap to be able to catch the monkey
+    public static readonly Size Shark = new(30, 8);
 }

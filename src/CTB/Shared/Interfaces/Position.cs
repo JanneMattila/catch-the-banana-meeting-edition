@@ -1,24 +1,23 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CTB.Shared.Interfaces
+namespace CTB.Shared.Interfaces;
+
+public class Position
 {
-    public class Position
+    [JsonPropertyName("x")]
+    public double X { get; set; }
+
+    [JsonPropertyName("y")]
+    public double Y { get; set; }
+
+    [JsonPropertyName("rotation")]
+    public double Rotation { get; set; }
+
+    [JsonPropertyName("speed")]
+    public double Speed { get; set; }
+
+    public override string ToString()
     {
-        [JsonPropertyName("x")]
-        public double X { get; set; }
-
-        [JsonPropertyName("y")]
-        public double Y { get; set; }
-
-        [JsonPropertyName("rotation")]
-        public double Rotation { get; set; }
-
-        [JsonPropertyName("speed")]
-        public double Speed { get; set; }
-
-        public override string ToString()
-        {
-            return $"X: {X}, Y: {Y}, R: {Rotation}, S: {Speed}";
-        }
+        return $"X: {X}, Y: {Y}, R: {Rotation}, S: {Speed}";
     }
 }

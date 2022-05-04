@@ -6,47 +6,46 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CTB.Server.Services
+namespace CTB.Server.Services;
+
+public class GameEngineBackgroundService : BackgroundService
 {
-    public class GameEngineBackgroundService : BackgroundService
+    private readonly ILogger<GameEngineBackgroundService> _logger;
+    private readonly IGameEngineServer _gameEngine;
+
+    public GameEngineBackgroundService(ILogger<GameEngineBackgroundService> logger, IGameEngineServer gameEngine)
     {
-        private readonly ILogger<GameEngineBackgroundService> _logger;
-        private readonly IGameEngineServer _gameEngine;
+        _logger = logger;
+        _gameEngine = gameEngine;
+    }
 
-        public GameEngineBackgroundService(ILogger<GameEngineBackgroundService> logger, IGameEngineServer gameEngine)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        const double SPEED_CONSTANT = 100d;
+
+        var stopWatch = Stopwatch.StartNew();
+        var update = stopWatch.Elapsed.Ticks;
+
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _logger = logger;
-            _gameEngine = gameEngine;
-        }
+            var timestamp = stopWatch.Elapsed.Ticks;
+            var delta = SPEED_CONSTANT * (timestamp - update) / TimeSpan.TicksPerSecond;
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            const double SPEED_CONSTANT = 100d;
+            _logger.LogTrace(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
 
-            var stopWatch = Stopwatch.StartNew();
-            var update = stopWatch.Elapsed.Ticks;
+            var updates = await _gameEngine.UpdateAsync(delta);
+            update = timestamp;
 
-            while (!stoppingToken.IsCancellationRequested)
+            if (updates)
             {
-                var timestamp = stopWatch.Elapsed.Ticks;
-                var delta = SPEED_CONSTANT * (timestamp - update) / TimeSpan.TicksPerSecond;
-
-                _logger.LogTrace(LoggingEvents.GameEngineBackgroundServiceDebug, $"Delta: {delta}");
-
-                var updates = await _gameEngine.UpdateAsync(delta);
-                update = timestamp;
-
-                if (updates)
-                {
-                    // Run game engine all the time.
-                    // In reality this delay is ~20ms which is okay for game like this
-                    await Task.Delay(1, stoppingToken);
-                }
-                else
-                {
-                    // Wait for players to join
-                    await Task.Delay(1000, stoppingToken);
-                }
+                // Run game engine all the time.
+                // In reality this delay is ~20ms which is okay for game like this
+                await Task.Delay(1, stoppingToken);
+            }
+            else
+            {
+                // Wait for players to join
+                await Task.Delay(1000, stoppingToken);
             }
         }
     }

@@ -1,24 +1,23 @@
 ﻿using CTB.Shared.Interfaces;
 using System.Collections.Generic;
 
-namespace CTB.Server.Data
+namespace CTB.Server.Data;
+
+public interface IRepository
 {
-    public interface IRepository
-    {
-        Monkey GetByConnectionID(string playerID);
-        Monkey GetByPlayerID(string playerID);
-        
-        List<Monkey> GetConnectedMonkeys();
+    Monkey GetByConnectionID(string playerID);
+    Monkey GetByPlayerID(string playerID);
 
-        Monkey DeleteByConnectionID(string connectionID);
-        Monkey MapConnectionIDToPlayer(string connectionID, string playerID);
+    List<Monkey> GetConnectedMonkeys();
 
-        void AddShark(Shark shark);
-        List<Shark> GetSharks();
-        void DeleteShark(string id);
+    Monkey DeleteByConnectionID(string connectionID);
+    Monkey MapConnectionIDToPlayer(string connectionID, string playerID);
 
-        void AddBanana(Banana banana);
-        List<Banana> GetBananas();
-        void DeleteBanana(string id);
-    }
+    void AddShark(Shark shark);
+    List<Shark> GetSharks();
+    void DeleteShark(string id);
+
+    void AddBanana(Banana banana);
+    List<Banana> GetBananas();
+    void DeleteBanana(string id);
 }
