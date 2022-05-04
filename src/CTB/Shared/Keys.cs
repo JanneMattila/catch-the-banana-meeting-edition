@@ -6,7 +6,7 @@
         public const int Up = 38;
         public const int Down = 40;
         public const int Right = 39;
-        
+
         public const int KeyA = 65;
         public const int KeyW = 87;
         public const int KeyS = 83;

@@ -31,8 +31,8 @@ Hence the name Catch the Banana (meeting edition).
 ### How to create image locally
 
 ```batch
-# Build container image
-docker build . -t catch-the-banana:latest
+# Build container image from repo root
+docker build . -f src/CTB/Server/Dockerfile -t catch-the-banana:latest
 
 # Run container using command
 docker run -p "2001:80" catch-the-banana:latest

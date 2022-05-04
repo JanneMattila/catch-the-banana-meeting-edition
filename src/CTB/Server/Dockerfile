@@ -1,15 +1,10 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # 1. Build image(https://hub.docker.com/_/microsoft-dotnet-sdk)
-FROM mcr.microsoft.com/dotnet/aspnet:5.0.4-focal-amd64 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:5.0.201-focal-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.202-bullseye-slim-amd64 AS build
 
 WORKDIR /node
-ENV NODE_VERSION 14.16.0
+ENV NODE_VERSION 16.15.0
 RUN apt-get update -qq && \
     apt-get dist-upgrade --no-install-recommends -y && \
     apt-get install -y --no-install-recommends xz-utils
@@ -29,14 +24,14 @@ RUN dotnet restore "src/CTB/Server/CTB.Server.csproj"
 COPY . .
 WORKDIR "/build/src/CTB/Server"
 RUN dotnet build "CTB.Server.csproj" -c Release -o /app/build
-
-# 2. Release image
-FROM build AS publish
 RUN dotnet publish "CTB.Server.csproj" -c Release -o /app/publish
 
-FROM base AS final
+# 2. Release image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.4-alpine3.15-amd64 AS base
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# Copy content from Build image
-COPY --from=publish /app/publish .
+# Copy content from build image
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "CTB.Server.dll"]
