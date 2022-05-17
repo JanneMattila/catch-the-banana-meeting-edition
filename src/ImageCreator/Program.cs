@@ -8,7 +8,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        var playerImageData = "" +
+        var playerImageDataIdle = "" +
             ". . . . f f f f f . . . . . . .\n" +
             ". . . f 0 0 0 0 0 f . . . . . .\n" +
             ". . f d d d d 0 0 0 f . . . . .\n" +
@@ -25,7 +25,23 @@ class Program
             ". . . f d b f d b f f 0 f . . .\n" +
             ". . . f d d c d d b b d f . . .\n" +
             ". . . . f f f f f f f f f . . .";
-
+        var playerImageDataRun = "" +
+            ". . . . f f f f f . . . . . . .\n" +
+            ". . . f 0 0 0 0 0 f . . . . . .\n" +
+            ". . f d d d d 0 0 0 f . . . . .\n" +
+            ". c d 1 d d 1 d 0 0 f f . . . .\n" +
+            ". c d 1 d d 1 d 0 0 d d f . . .\n" +
+            "c d 0 0 d d d d 0 0 b d c . . .\n" +
+            "c d d d d c d d 0 0 b d c . . f f\n" +
+            "c c c c c d d d 0 0 f c . . f 0 f\n" +
+            ". f d d d d d 0 0 f f . . f 0 f\n" +
+            ". . f f f f f 0 0 0 0 f . f 0 f\n" +
+            ". . . f 0 0 0 0 0 0 0 f f 0 f\n" +
+            ". . f f 0 f 0 0 0 f 0 0 0 0 f f .\n" +
+            ". . f 0 f f 0 0 0 f 0 0 0 0 f . .\n" +
+            ". . f d b f f f d b f f 0 f . . .\n" +
+            ". . f d d c f f d d b b d f . . .\n" +
+            ". . . f f f f f f f f f f . . .";
         var sharkImageData = "" +
             ". . . . . . . . . . . . . . c c f f f f . . . . . . . . . . . . . . . \n" +
             ". . . . . . . . . . . . . c d d b b b f . . . . . . . . . . . . . . . \n" +
@@ -39,6 +55,20 @@ class Program
             ". f f 1 1 1 1 1 1 1 1 1 b b b b c c c c c c b b b c c . . f b b c f . \n" +
             ". . . c c c c c c c 1 1 1 b d b b b f d d b c c c . . . . . f f b b f \n" +
             ". . . . . . . c c c c c c f b d b b b f c c . . . . . . . . . . f f f \n" +
+            ". . . . . . . . . . . . . . f f f f f f . . . . . . . . . . . . . . . ";
+        var sharkImageDataRun = "" +
+            ". . . . . . . . . . . . . . c c f f f f . . . . . . . . . . . . . . . \n" +
+            ". . . . . . . . . . . . . c d d b b b f . . . . . . . . . . . . . . . \n" +
+            ". . . . . . f f f f f f c d d b b b f . . . . . . . . . . . c c c c c \n" +
+            ". . . . f f b b b b b b b b b b b b b c f f f . . . . . . c d b b b c \n" +
+            ". . f f b b b b b b b b c b c b b b b b c c c f f . . . c d d b b c . \n" +
+            ". f b b b b b b b b b b c b b c b b b b c c c c c f f f b d b b f . . \n" +
+            "f b c b b b b b b b b b b c b c b b b b c c c c c c c c c b b c f . . \n" +
+            "f b b b b b b b 2 2 2 b b c b b b b b c c c c c c c c c f b c c f . . \n" +
+            "f f b b 1 1 1 1 2 2 2 b b c b b b b c c c c c c c b c f   f b b c f . \n" +
+            ". f f 1 1 1 1 1 1 1 1 1 b b b b c c c c c c b b b c c . . . f f b b f \n" +
+            ". . . c c c c c c c 1 1 1 b d b b b f d d b c c c . . . . . . . f f f \n" +
+            ". . . . . . . c c c c c c f b d b b b f c c . . . . . . . . . . . . . \n" +
             ". . . . . . . . . . . . . . f f f f f f . . . . . . . . . . . . . . . ";
 
         var bananaImageData = "" +
@@ -55,14 +85,21 @@ class Program
             ". 5 5 e 5 . . \n" +
             ". . 5 5 5 . . ";
 
-        CreatePlayer("monkey1.png", playerImageData, eyes: Color.Red, body: Color.Blue);
-        CreatePlayer("monkey2.png", playerImageData, eyes: Color.Blue, body: Color.Brown);
-        CreatePlayer("monkey3.png", playerImageData, eyes: Color.DarkBlue, body: Color.DarkKhaki);
-        CreatePlayer("monkey4.png", playerImageData, eyes: Color.Blue, body: Color.Yellow);
-        CreatePlayer("monkey5.png", playerImageData, eyes: Color.Black, body: Color.Violet);
-        CreatePlayer("monkey6.png", playerImageData, eyes: Color.Blue, body: Color.DarkBlue);
+        CreatePlayer("monkey1_idle.png", playerImageDataIdle, eyes: Color.Red, body: Color.Blue);
+        CreatePlayer("monkey1_run.png", playerImageDataRun, eyes: Color.Red, body: Color.Blue);
+        CreatePlayer("monkey2_idle.png", playerImageDataIdle, eyes: Color.Blue, body: Color.Brown);
+        CreatePlayer("monkey2_run.png", playerImageDataRun, eyes: Color.Blue, body: Color.Brown);
+        CreatePlayer("monkey3_idle.png", playerImageDataIdle, eyes: Color.DarkBlue, body: Color.DarkKhaki);
+        CreatePlayer("monkey3_run.png", playerImageDataRun, eyes: Color.DarkBlue, body: Color.DarkKhaki);
+        CreatePlayer("monkey4_idle.png", playerImageDataIdle, eyes: Color.Blue, body: Color.Yellow);
+        CreatePlayer("monkey4_run.png", playerImageDataRun, eyes: Color.Blue, body: Color.Yellow);
+        CreatePlayer("monkey5_idle.png", playerImageDataIdle, eyes: Color.Black, body: Color.Violet);
+        CreatePlayer("monkey5_run.png", playerImageDataRun, eyes: Color.Black, body: Color.Violet);
+        CreatePlayer("monkey6_idle.png", playerImageDataIdle, eyes: Color.Blue, body: Color.DarkBlue);
+        CreatePlayer("monkey6_run.png", playerImageDataRun, eyes: Color.Blue, body: Color.DarkBlue);
 
-        CreateImage("shark.png", sharkImageData);
+        CreateImage("shark_idle.png", sharkImageData);
+        CreateImage("shark_run.png", sharkImageDataRun);
         CreateImage("banana.png", bananaImageData);
     }
 

@@ -43,8 +43,6 @@ let _rightTouchCurrent: CanvasTouch = undefined;
 let _imagesLoaded = 0;
 let _imagesToLoad = -1;
 const _images: Array<HTMLImageElement> = [];
-const SHARK_INDEX = 6;
-const BANANA_INDEX = 7;
 
 const processFullscreenRequest = (x: number, y: number) => {
 
@@ -109,7 +107,7 @@ const resizeCanvas = () => {
         _canvasElement.width = 1200;
         _canvasElement.height = 800;
         const aspectRatio = _canvasElement.width / _canvasElement.height;
-        
+
         const availableWidth = maxWidth * 0.9;
         const availableHeight = maxHeight * 0.9;
         let resizeWidth = availableWidth;
@@ -253,25 +251,34 @@ const setTouchHandlers = (canvas: HTMLCanvasElement) => {
 
 const loadImages = () => {
     const files = [
-        "monkey1.png",
-        "monkey2.png",
-        "monkey3.png",
-        "monkey4.png",
-        "monkey5.png",
-        "monkey6.png",
-        "shark.png",
-        "banana.png"
+        "monkey1",
+        "monkey2",
+        "monkey3",
+        "monkey4",
+        "monkey5",
+        "monkey6",
+        "shark",
+        "banana"
     ];
-    _imagesToLoad = files.length;
+    _imagesToLoad = files.length * 2;
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const img = new Image();
-        img.onload = function () {
+        const key1 = `${file}_idle`;
+        const img1 = new Image();
+        img1.onload = function () {
             _imagesLoaded++;
         };
-        img.src = "/images/" + file;
-        _images[i] = img;
+        img1.src = `/images/${key1}.png`;
+        _images[key1] = img1;
+
+        const key2 = `${file}_run`;
+        const img2 = new Image();
+        img2.onload = function () {
+            _imagesLoaded++;
+        };
+        img2.src = `/images/${key2}.png`;
+        _images[key2] = img2;
     }
 };
 
@@ -304,7 +311,14 @@ const getPlayerId = () => {
     return id;
 }
 
-const drawImage = (img: HTMLImageElement, position: any) => {
+const drawImage = (imageName: string, position: any) => {
+
+    const img: HTMLImageElement = _images[imageName]
+    if (img === undefined) {
+        console.log(`Image '${imageName}'not set correctly.`);
+        return;
+    }
+
     const x = Math.round(position.x);
     const y = Math.round(position.y);
     if (position.rotation >= Math.PI * 3 / 2 || position.rotation <= Math.PI / 2) {
@@ -382,22 +396,22 @@ CTB.draw = (game) => {
 
             for (let i = 0; i < game.bananas.length; i++) {
                 const banana = game.bananas[i];
-                drawImage(_images[BANANA_INDEX], banana.position);
+                drawImage("banana_idle", banana.position);
             }
 
             for (let i = 0; i < game.monkeys.length; i++) {
                 const monkey = game.monkeys[i];
-                drawImage(_images[monkey.ui], monkey.position);
+                drawImage(`monkey${monkey.ui}_idle`, monkey.position);
             }
 
-            drawImage(_images[game.me.ui], game.me.position);
+            drawImage(`monkey${game.me.ui}_idle`, game.me.position);
 
             for (let i = 0; i < game.sharks.length; i++) {
                 const shark = game.sharks[i];
-                drawImage(_images[SHARK_INDEX], shark.position);
+                drawImage("shark_idle", shark.position);
             }
         }
     }
-    
+
     _context.restore();
 };
