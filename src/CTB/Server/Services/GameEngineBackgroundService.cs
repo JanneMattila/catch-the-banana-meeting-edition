@@ -1,6 +1,8 @@
 ﻿using CTB.Server.Logic;
+using CTB.Server.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -12,11 +14,13 @@ public class GameEngineBackgroundService : BackgroundService
 {
     private readonly ILogger<GameEngineBackgroundService> _logger;
     private readonly IGameEngineServer _gameEngine;
+    private readonly IOptions<CTBOptions> _options;
 
-    public GameEngineBackgroundService(ILogger<GameEngineBackgroundService> logger, IGameEngineServer gameEngine)
+    public GameEngineBackgroundService(ILogger<GameEngineBackgroundService> logger, IGameEngineServer gameEngine, IOptions<CTBOptions> options)
     {
         _logger = logger;
         _gameEngine = gameEngine;
+        _options = options;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -39,8 +43,18 @@ public class GameEngineBackgroundService : BackgroundService
             if (updates)
             {
                 // Run game engine all the time.
-                // In reality this delay is ~20ms which is okay for game like this
-                await Task.Delay(1, stoppingToken);
+                if (_options.Value.GameEngineDelay.HasValue)
+                {
+                    if (_options.Value.GameEngineDelay.Value > 0)
+                    {
+                        await Task.Delay(_options.Value.GameEngineDelay.Value, stoppingToken);
+                    }
+                }
+                else
+                {
+                    // In reality this delay is ~20ms which is okay for game like this
+                    await Task.Delay(1, stoppingToken);
+                }
             }
             else
             {

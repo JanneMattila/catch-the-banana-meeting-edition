@@ -1,6 +1,7 @@
 using CTB.Server.Data;
 using CTB.Server.Hubs;
 using CTB.Server.Logic;
+using CTB.Server.Models;
 using CTB.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,11 @@ public class Startup
         services.AddSignalR();
         services.AddControllersWithViews();
         services.AddRazorPages();
+        services.AddOptions<CTBOptions>()
+            .Configure<IConfiguration>((settings, configuration) =>
+            {
+                configuration.GetSection("CTB").Bind(settings);
+            });
         services.AddSingleton<IRepository, Repository>();
         services.AddSingleton<IGameEngineServer, GameEngineServer>();
         services.AddSingleton<IHostedService, GameEngineBackgroundService>();
