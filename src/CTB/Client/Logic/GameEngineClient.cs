@@ -92,7 +92,12 @@ public class GameEngineClient : GameEngineBase
             if (monkey != null)
             {
                 shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
-                shark.Update(delta);
+                var distance = CalculateDistance(monkey.Position, shark.Position);
+                if (distance > 5)
+                {
+                    // This shark is not yet overapping with monkey it's following
+                    shark.Update(delta);
+                }
             }
         }
 
