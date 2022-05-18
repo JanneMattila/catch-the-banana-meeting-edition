@@ -24,6 +24,12 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
         _logger = logger;
     }
 
+    protected void CreateRandomPosition(Position position)
+    {
+        position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius);
+        position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius);
+    }
+
     public Position MoveMonkey(Monkey monkey, Position position)
     {
         double distance = CalculateDistance(monkey.Position, position);
@@ -31,6 +37,8 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
         {
             _logger.LogWarning($"Distance between positions is {distance}. Old: {monkey.Position} -> New: {position}");
         }
+
+        monkey.Position.Rotation = position.Rotation;
 
         // Accept new position
         return position;
@@ -45,29 +53,26 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
 
         foreach (var monkey in monkeys)
         {
-            if (monkey.Position.Speed > 0)
+            monkey.Update(delta);
+            foreach (var banana in bananas)
             {
-                MoveObject(monkey.Position, delta);
-                foreach (var banana in bananas)
+                var distance = CalculateDistance(banana.Position, monkey.Position);
+                if (distance <= WorldConstants.Banana.Height)
                 {
-                    var distance = CalculateDistance(banana.Position, monkey.Position);
-                    if (distance <= WorldConstants.Banana.Height)
+                    var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, banana.Position, WorldConstants.Banana);
+                    if (collision)
                     {
-                        var collision = CheckCollision(monkey.Position, WorldConstants.Monkey, banana.Position, WorldConstants.Banana);
-                        if (collision)
+                        monkey.Score++;
+                        if (eatenBananas.ContainsKey(banana.ID))
                         {
-                            monkey.Score++;
-                            if (eatenBananas.ContainsKey(banana.ID))
-                            {
-                                eatenBananas[banana.ID].Add(monkey.ID);
-                            }
-                            else
-                            {
-                                eatenBananas[banana.ID] = new List<string>()
+                            eatenBananas[banana.ID].Add(monkey.ID);
+                        }
+                        else
+                        {
+                            eatenBananas[banana.ID] = new List<string>()
                                 {
                                     monkey.ID
                                 };
-                            }
                         }
                     }
                 }
@@ -127,7 +132,7 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
 
                 _logger.LogTrace($"Closest monkey: {closestMonkey.ID}, {shark.Position.Rotation}, {closestMonkey.Position.Rotation}");
 
-                MoveObject(shark.Position, delta);
+                shark.Update(delta);
 
                 if (closestMonkey.ID != shark.Follows)
                 {

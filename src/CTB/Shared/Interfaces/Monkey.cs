@@ -2,11 +2,8 @@
 
 namespace CTB.Shared.Interfaces;
 
-public class Monkey
+public class Monkey : CharacterBase
 {
-    [JsonPropertyName("id")]
-    public string ID { get; set; }
-
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
@@ -15,7 +12,4 @@ public class Monkey
 
     [JsonPropertyName("ui")]
     public int UI { get; set; }
-
-    [JsonPropertyName("position")]
-    public Position Position { get; set; } = new();
 }

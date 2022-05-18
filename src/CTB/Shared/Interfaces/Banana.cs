@@ -1,12 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace CTB.Shared.Interfaces;
 
-namespace CTB.Shared.Interfaces;
-
-public class Banana
+public class Banana : CharacterBase
 {
-    [JsonPropertyName("id")]
-    public string ID { get; set; }
-
-    [JsonPropertyName("position")]
-    public Position Position { get; set; } = new();
 }

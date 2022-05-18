@@ -72,36 +72,27 @@ public class GameEngineClient : GameEngineBase
 
     public void Update(double delta)
     {
-        if (_game.Me.Position.Speed > 0)
-        {
-            MoveObject(_game.Me.Position, delta);
-        }
+        _game.Me.Update(delta);
 
         _positionUpdated += delta;
-        if (_positionUpdated > 250)
+        if (_positionUpdated > 60)
         {
             _executePlayerUpdated(_game.Me.Position);
-            _positionUpdated = 0;
+            _positionUpdated -= 60;
         }
 
         foreach (var monkey in _game.Monkeys)
         {
-            if (monkey.Position.Speed > 0)
-            {
-                MoveObject(monkey.Position, delta);
-            }
+            monkey.Update(delta);
         }
 
         foreach (var shark in _game.Sharks)
         {
-            if (shark.Position.Speed > 0)
+            var monkey = GetMonkey(shark.Follows);
+            if (monkey != null)
             {
-                var monkey = GetMonkey(shark.Follows);
-                if (monkey != null)
-                {
-                    shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
-                    MoveObject(shark.Position, delta);
-                }
+                shark.Position.Rotation = CalculateAngle(shark.Position, monkey.Position);
+                shark.Update(delta);
             }
         }
 

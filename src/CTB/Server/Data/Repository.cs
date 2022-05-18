@@ -64,7 +64,7 @@ public class Repository : IRepository
             ID = playerID,
             Name = name,
             Score = 0,
-            UI = _random.Next(0, 6),
+            UI = _random.Next(1, 7),
             Position = new Position()
             {
                 X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius),

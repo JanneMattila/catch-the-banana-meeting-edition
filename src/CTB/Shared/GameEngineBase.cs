@@ -61,34 +61,4 @@ public class GameEngineBase
         }
         return true;
     }
-
-    protected void MoveObject(Position position, double delta)
-    {
-        position.X += position.Speed * delta * Math.Cos(position.Rotation);
-        position.Y += position.Speed * delta * Math.Sin(position.Rotation);
-
-        if (position.X < WorldConstants.BorderRadius)
-        {
-            position.X = WorldConstants.BorderRadius;
-        }
-        else if (position.X > WorldConstants.Screen.Width - WorldConstants.BorderRadius)
-        {
-            position.X = WorldConstants.Screen.Width - WorldConstants.BorderRadius;
-        }
-
-        if (position.Y < WorldConstants.BorderRadius)
-        {
-            position.Y = WorldConstants.BorderRadius;
-        }
-        else if (position.Y > WorldConstants.Screen.Height - WorldConstants.BorderRadius)
-        {
-            position.Y = WorldConstants.Screen.Height - WorldConstants.BorderRadius;
-        }
-    }
-
-    protected void CreateRandomPosition(Position position)
-    {
-        position.X = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Width - WorldConstants.BorderRadius);
-        position.Y = _random.Next(WorldConstants.BorderRadius, WorldConstants.Screen.Height - WorldConstants.BorderRadius);
-    }
 }

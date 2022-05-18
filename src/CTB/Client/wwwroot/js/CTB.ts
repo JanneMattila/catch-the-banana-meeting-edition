@@ -311,8 +311,11 @@ const getPlayerId = () => {
     return id;
 }
 
-const drawImage = (imageName: string, position: any) => {
+const drawImage = (characterName: string, character: any, animationThreshold: number = 0) => {
 
+    const animation = character.animation;
+    const position = character.position;
+    const imageName = animation >= animationThreshold ? `${characterName}_run` : `${characterName}_idle`;
     const img: HTMLImageElement = _images[imageName]
     if (img === undefined) {
         console.log(`Image '${imageName}'not set correctly.`);
@@ -396,19 +399,19 @@ CTB.draw = (game) => {
 
             for (let i = 0; i < game.bananas.length; i++) {
                 const banana = game.bananas[i];
-                drawImage("banana_idle", banana.position);
+                drawImage("banana", banana);
             }
 
             for (let i = 0; i < game.monkeys.length; i++) {
                 const monkey = game.monkeys[i];
-                drawImage(`monkey${monkey.ui}_idle`, monkey.position);
+                drawImage(`monkey${monkey.ui}`, monkey, 10);
             }
 
-            drawImage(`monkey${game.me.ui}_idle`, game.me.position);
+            drawImage(`monkey${game.me.ui}`, game.me, 10);
 
             for (let i = 0; i < game.sharks.length; i++) {
                 const shark = game.sharks[i];
-                drawImage("shark_idle", shark.position);
+                drawImage("shark", shark, 40);
             }
         }
     }
