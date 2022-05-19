@@ -11,8 +11,10 @@ public class GameEngineClient : GameEngineBase
     private Game _game = new();
     private Action<Game> _executeDraw;
     private Action<Position> _executePlayerUpdated;
+    private Action<Ping> _executePingUpdated;
     private HashSet<int> _keys = new();
     private double _positionUpdated = 0;
+    private double _pingUpdated = 0;
 
     public Game Game { get => _game; }
 
@@ -24,6 +26,11 @@ public class GameEngineClient : GameEngineBase
     public void SetExecutePlayerUpdated(Action<Position> executePlayerUpdated)
     {
         _executePlayerUpdated = executePlayerUpdated;
+    }
+
+    public void SetExecutePingUpdated(Action<Ping> executePingUpdated)
+    {
+        _executePingUpdated = executePingUpdated;
     }
 
     public void SetPlayerID(string playerID)
@@ -72,6 +79,13 @@ public class GameEngineClient : GameEngineBase
 
     public void Update(double delta)
     {
+        _pingUpdated += delta;
+        if (_pingUpdated > 1000)
+        {
+            _executePingUpdated(new Ping());
+            _pingUpdated -= 1000;
+        }
+
         _game.Me.Update(delta);
 
         _positionUpdated += delta;

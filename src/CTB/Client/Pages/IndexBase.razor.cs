@@ -39,14 +39,29 @@ public class IndexBase : ComponentBase, IDisposable
         {
             if (_hubConnection.State == HubConnectionState.Connected)
             {
-                Console.WriteLine($"Sending position {position}");
+                //Console.WriteLine($"Sending position {position}");
                 try
                 {
                     await _hubConnection.InvokeAsync(HubConstants.MoveMonkeyEventMethod, position);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error while sending request:");
+                    Console.WriteLine("Error while sending player update request:");
+                    Console.WriteLine(ex);
+                }
+            }
+        });
+        _gameEngine.SetExecutePingUpdated(async (ping) =>
+        {
+            if (_hubConnection.State == HubConnectionState.Connected)
+            {
+                try
+                {
+                    await _hubConnection.InvokeAsync(HubConstants.PingEventMethod, ping);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while sending ping request:");
                     Console.WriteLine(ex);
                 }
             }
@@ -57,6 +72,12 @@ public class IndexBase : ComponentBase, IDisposable
             .Build();
 
         _hubConnection.Closed += HubConnection_Closed;
+        _hubConnection.On(HubConstants.PingEventMethod, (Ping ping) =>
+        {
+            var diff = DateTimeOffset.UtcNow - ping.Start;
+            Console.WriteLine($"Ping: {diff.TotalMilliseconds} ms");
+        });
+
         _hubConnection.On(HubConstants.PlayerRegisteredEventMethod, (Monkey monkey) =>
         {
             PlayerRegisteredEventMethod(monkey);

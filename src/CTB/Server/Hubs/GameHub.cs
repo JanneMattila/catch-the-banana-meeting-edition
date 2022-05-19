@@ -64,4 +64,9 @@ public class GameHub : Hub
         monkey.Position = _gameEngineServer.MoveMonkey(monkey, position);
         await Clients.Others.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
     }
+
+    public async Task PingEvent(Ping ping)
+    {
+        await Clients.Caller.SendAsync(HubConstants.PingEventMethod, ping);
+    }
 }

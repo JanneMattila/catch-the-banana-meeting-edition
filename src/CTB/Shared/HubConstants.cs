@@ -12,4 +12,6 @@ public static class HubConstants
     public const string DeleteBananaEventMethod = "DeleteBananaEvent";
     public const string MoveSharkEventMethod = "MoveSharkEvent";
     public const string DeleteSharkEventMethod = "DeleteSharkEvent";
+
+    public const string PingEventMethod = "PingEvent";
 }
