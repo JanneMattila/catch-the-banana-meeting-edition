@@ -82,7 +82,11 @@ public class Repository : IRepository
         var list = new List<Monkey>();
         foreach (var item in _mapConnectionID2PlayerID)
         {
-            list.Add(_monkeys.Get<Monkey>(item.Value));
+            var monkey = _monkeys.Get<Monkey>(item.Value);
+            if (monkey is not null)
+            {
+                list.Add(monkey);
+            }
         }
         return list;
     }
