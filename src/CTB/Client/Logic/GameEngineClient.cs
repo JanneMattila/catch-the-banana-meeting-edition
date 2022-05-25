@@ -14,7 +14,6 @@ public class GameEngineClient : GameEngineBase
     private Action<Ping> _executePingUpdated;
     private HashSet<int> _keys = new();
     private double _positionUpdated = 0;
-    private double _pingUpdated = 0;
 
     public Game Game { get => _game; }
 
@@ -79,25 +78,32 @@ public class GameEngineClient : GameEngineBase
 
     public void Update(double delta)
     {
-        _pingUpdated += delta;
-        if (_pingUpdated > 1000)
-        {
-            _executePingUpdated(new Ping());
-            _pingUpdated -= 1000;
-        }
-
         _game.Me.Update(delta);
 
         _positionUpdated += delta;
-        if (_positionUpdated > 60)
+        if (_positionUpdated > 100)
         {
             _executePlayerUpdated(_game.Me.Position);
-            _positionUpdated -= 60;
+            _positionUpdated -= 100;
         }
 
         foreach (var monkey in _game.Monkeys)
         {
+            var start = monkey.Position.Copy();
             monkey.Update(delta);
+            var end = monkey.Position.Copy();
+
+            // Check if server position is inside start and end rectangle
+            // If yes then calculate used distance between end and server position
+            // and move from server position onwards.
+            if (IsInside(start, end, monkey.ServerPosition))
+            {
+                var distance = CalculateDistance(monkey.Position, monkey.ServerPosition);
+
+                monkey.Position.Rotation = monkey.ServerPosition.Rotation;
+                monkey.Position.X += distance * Math.Cos(monkey.Position.Rotation);
+                monkey.Position.Y += distance * Math.Sin(monkey.Position.Rotation);
+            }
         }
 
         foreach (var shark in _game.Sharks)
@@ -179,10 +185,8 @@ public class GameEngineClient : GameEngineBase
         return (rotation, movePlayer, changed);
     }
 
-    public void MonkeyUpdate(Monkey monkey)
+    public void MonkeyUpdate(Monkey monkey, bool authoritative)
     {
-        MonkeyDelete(monkey);
-
         UpdateScoreBoard(monkey);
 
         if (_game.Me.ID == monkey.ID)
@@ -191,7 +195,27 @@ public class GameEngineClient : GameEngineBase
         }
         else
         {
-            _game.Monkeys.Add(monkey);
+            var updateMonkey = _game.Monkeys.FirstOrDefault(m => m.ID == monkey.ID);
+            if (updateMonkey != null)
+            {
+                updateMonkey.Score = monkey.Score;
+
+                if (authoritative)
+                {
+                    updateMonkey.Position = monkey.Position;
+                }
+                else
+                {
+                    // Re-calculate the rotation to match the target server position
+                    updateMonkey.Position.Speed = monkey.Position.Speed;
+                    updateMonkey.Position.Rotation = CalculateAngle(updateMonkey.Position, monkey.Position);
+                    updateMonkey.ServerPosition = monkey.Position;
+                }
+            }
+            else
+            {
+                _game.Monkeys.Add(monkey);
+            }
         }
     }
 

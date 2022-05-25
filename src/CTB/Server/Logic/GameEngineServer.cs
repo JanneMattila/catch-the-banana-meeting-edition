@@ -38,8 +38,6 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
             _logger.LogWarning($"Distance between positions is {distance}. Old: {monkey.Position} -> New: {position}");
         }
 
-        monkey.Position.Rotation = position.Rotation;
-
         // Accept new position
         return position;
     }
@@ -110,7 +108,7 @@ public class GameEngineServer : GameEngineBase, IGameEngineServer
                     // Monkey has been eaten by the shark!
                     CreateRandomPosition(monkey.Position);
 
-                    await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, monkey);
+                    await _gameHub.Clients.All.SendAsync(HubConstants.MoveMonkeyEventMethod, true, monkey);
                 }
                 else
                 {

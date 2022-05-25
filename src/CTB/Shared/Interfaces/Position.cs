@@ -20,4 +20,15 @@ public class Position
     {
         return $"X: {X}, Y: {Y}, R: {Rotation}, S: {Speed}";
     }
+
+    public Position Copy()
+    {
+        return new Position()
+        {
+            X = this.X,
+            Y = this.Y,
+            Rotation = this.Rotation,
+            Speed = this.Speed
+        };
+    }
 }

@@ -39,7 +39,6 @@ public class IndexBase : ComponentBase, IDisposable
         {
             if (_hubConnection.State == HubConnectionState.Connected)
             {
-                //Console.WriteLine($"Sending position {position}");
                 try
                 {
                     await _hubConnection.InvokeAsync(HubConstants.MoveMonkeyEventMethod, position);
@@ -84,15 +83,15 @@ public class IndexBase : ComponentBase, IDisposable
             StateHasChanged();
         });
 
-        _hubConnection.On(HubConstants.MoveMonkeyEventMethod, (Monkey monkey) =>
+        _hubConnection.On(HubConstants.MoveMonkeyEventMethod, (bool authoritative, Monkey monkey) =>
         {
-            _gameEngine.MonkeyUpdate(monkey);
+            _gameEngine.MonkeyUpdate(monkey, authoritative);
             StateHasChanged();
         });
 
         _hubConnection.On(HubConstants.MonkeyConnectedEventMethod, (Monkey monkey) =>
         {
-            _gameEngine.MonkeyUpdate(monkey);
+            _gameEngine.MonkeyUpdate(monkey, true);
             StateHasChanged();
         });
 

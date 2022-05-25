@@ -61,4 +61,24 @@ public class GameEngineBase
         }
         return true;
     }
+
+    protected bool IsInside(Position position1, Position position2, Position p)
+    {
+        var p1 = new Position()
+        {
+            X = Math.Min(position1.X, position2.X),
+            Y = Math.Min(position1.Y, position2.Y)
+        };
+        var p2 = new Position()
+        {
+            X = Math.Max(position1.X, position2.X),
+            Y = Math.Max(position1.Y, position2.Y)
+        };
+
+        if (p1.X <= p.X && p1.Y <= p.Y && p2.X >= p.X && p2.Y >= p.Y)
+        {
+            return true;
+        }
+        return false;
+    }
 }
