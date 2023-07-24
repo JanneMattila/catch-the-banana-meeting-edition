@@ -4,6 +4,7 @@ using CTB.Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,7 @@ public class IndexBase : ComponentBase, IDisposable
 
         _hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/GameHub"))
+            .AddMessagePackProtocol()
             .Build();
 
         _hubConnection.Closed += HubConnection_Closed;
